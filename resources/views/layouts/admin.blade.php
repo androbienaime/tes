@@ -12,12 +12,16 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+      
+        <style>
+          [x-cloak] { display: none !important; }
+      </style>
     </head>
     <body class="font-[Poppins] antialiased">
-          <div class="relative min-h-screen md:flex " x-data="{ opens: true }">
+          <div class="relative min-h-screen md:flex  " x-data="{ opens: true }">
             <!-- Sidebar -->
-            <aside :class="{ '-translate-x-full': !opens }" class="z-10 bg-gray-900 text-blue-100 w-64 px-2 py-4 absolute inset-y-0 left-0 md:relative transform 
-             md:translate-x-0 overflow-y-auto transition ease-in-out duration-200 shadow-lg overflow-y-auto">
+            <aside :class="{ '-translate-x-full': !opens }" class="md:fixed lg:fixed right-0 z-10 bg-gray-900 text-blue-100 w-64 px-2 py-4 absolute inset-y-0 left-0 md:relative transform 
+             md:translate-x-0 overflow-auto  transition ease-in-out duration-200 shadow-lg">
                 <!-- Logo -->
                 <div class="flex align-items-center justify-between px-2">
                   <div class="block flex items-center space-x-2">
@@ -67,7 +71,7 @@
 
                 <!-- SubMenu -->
                 <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-gray-200" id="submenu1">
-                  <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
+                  <a href="{{ route('customer') }}" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
                     <i class="bi bi-1-circle-fill"></i>
                     {{ __("Register account") }}
                   </a>
@@ -150,7 +154,7 @@
                       <i class="bi bi-1-circle-fill"></i>
                       {{ __("Employees") }}
                     </a>
-                    <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
+                    <a href="{{ route("branch") }}" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
                       <i class="bi bi-2-circle-fill"></i>
                       {{ __("Branch") }}
                     </a>
@@ -170,9 +174,21 @@
             </aside>
 
             <!-- Main content -->
-            <main class="flex-1 bg-gray-100 h-screen">
-              @include('partials.navigation')
-              <div>
+            <main class="flex-1 bg-gray-100 h-screen sm:ml-64 mb-5">
+              <div class="">
+                @include('partials.navigation')
+
+                        <!-- Page Heading -->
+                @if (isset($header))
+                  <header class="bg-white shadow">
+                      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                          {{ $header }}
+                      </div>
+                  </header>
+                @endif
+              </div>
+
+              <div class="">
                  {{ $slot }}
               </div>
             </main>

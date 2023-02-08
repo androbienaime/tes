@@ -21,5 +21,18 @@
     "Custumers" : "Clients",
     "Address" : "Adresse",
     "Modules Manager" : "Gestionnaire de modules",
-    "Modules Catalog" : "Catalogue de modules"
+    "Modules Catalog" : "Catalogue de modules",
+    "First name" : "Prénom",
+    "Last name" : "Nom",
+    "Gender" : "Sexe",
+    "Identity number" : "Numero d'identite",
+    "Email address" : "Adresse Email",
+    "Phone" : "Telephone",
+    "Country" : "Pays",
+    "City" : "Ville",
+    "Type Of Account" : "Type de compte",
+    "Save" : "Enregistrer",
+    "Add Branch" : "Ajouter Surcusale",
+    "Add Customer" : "Ajouter un client",
+    "Name" : "Nom"
 }
