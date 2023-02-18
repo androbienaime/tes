@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "androlt/countrypkglaravel",
-            "version": "v2.0.1",
+            "version": "v2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/androbienaime/androlt.git",
-                "reference": "d3b3f8b9008c2ad9871750342c76a3f48b1848b7"
+                "reference": "fa004ca3aca369f5b8269055c86d0fefd8dea2e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/androbienaime/androlt/zipball/d3b3f8b9008c2ad9871750342c76a3f48b1848b7",
-                "reference": "d3b3f8b9008c2ad9871750342c76a3f48b1848b7",
+                "url": "https://api.github.com/repos/androbienaime/androlt/zipball/fa004ca3aca369f5b8269055c86d0fefd8dea2e2",
+                "reference": "fa004ca3aca369f5b8269055c86d0fefd8dea2e2",
                 "shasum": ""
             },
             "type": "library",
@@ -42,9 +42,9 @@
             ],
             "support": {
                 "issues": "https://github.com/androbienaime/androlt/issues",
-                "source": "https://github.com/androbienaime/androlt/tree/v2.0.1"
+                "source": "https://github.com/androbienaime/androlt/tree/v2.0.3"
             },
-            "time": "2023-02-17T23:34:15+00:00"
+            "time": "2023-02-18T03:34:51+00:00"
         },
         {
             "name": "brick/math",
