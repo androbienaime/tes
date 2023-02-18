@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
+    protected $fillable = ["city", "country", "state", "email", "phone", "address1"];
     use HasFactory;
+
+    public function Branch(){
+        return $this->hasOne(Branch::class);
+    }
 }
