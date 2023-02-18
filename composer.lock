@@ -4,8 +4,48 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "01c5588f15f5911e28e29a648c229812",
+    "content-hash": "bb017df5788d165698b93dfa077437fa",
     "packages": [
+        {
+            "name": "androlt/countrypkglaravel",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/androbienaime/androlt.git",
+                "reference": "d3b3f8b9008c2ad9871750342c76a3f48b1848b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/androbienaime/androlt/zipball/d3b3f8b9008c2ad9871750342c76a3f48b1848b7",
+                "reference": "d3b3f8b9008c2ad9871750342c76a3f48b1848b7",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AndroLT\\Countrypkg\\CountrypkgServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AndroLT\\Countrypkg\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Lestruviens",
+                    "email": "admin@lestruviens.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/androbienaime/androlt/issues",
+                "source": "https://github.com/androbienaime/androlt/tree/v2.0.1"
+            },
+            "time": "2023-02-17T23:34:15+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.10.2",
