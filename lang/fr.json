@@ -6,7 +6,7 @@
     "Dashboard" : "Tableau de Bord",
     "Log Out" : "Deconnexion",
     "Administrator" : "Administrateur",
-    "Online" : "En ligne", 
+    "Online" : "En ligne",
     "Search..." : "Rechercher...",
     "Account" : "Gestion Compte",
     "Employee" : "Employées",
@@ -34,5 +34,18 @@
     "Save" : "Enregistrer",
     "Add Branch" : "Ajouter Surcusale",
     "Add Customer" : "Ajouter un client",
-    "Name" : "Nom"
+    "Name" : "Nom",
+    "Select City" : "Selectionner  Ville",
+    "Select State" : "Sellectionner Departement",
+    "Deposit" :  "Dépot",
+    "Add a Customer" : "Ajouter un Client",
+    "Add an Account" : "Ajouter un Compte",
+    "To make a deposit" : "Faire un dépôt",
+    "Code Customer" : "Code du Client",
+    "Full Name" : "Nom complet",
+    "Amount" : "Montant",
+    "NAME" : "NOM",
+    "Find a customer.." : "Rechercher un client..",
+    "Amount deposit with successfully" : "Montant deposer avec succès"
+
 }

@@ -13,4 +13,8 @@ class Address extends Model
     public function Branch(){
         return $this->hasOne(Branch::class);
     }
+
+    public function Account(){
+        return $this->hasOne(Account::class);
+    }
 }

@@ -7,5 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    protected $fillable =['code', 'name', 'first_name', 'gender',
+        'identity_number', 'employee_id', 'address_id'];
     use HasFactory;
+
+    public function Address(){
+        return $this->belongsTo(Address::class);
+    }
+
+    public function Account(){
+        return $this->belongsTo(Account::class);
+    }
 }

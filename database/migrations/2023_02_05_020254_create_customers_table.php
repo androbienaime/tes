@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string("code")->unique();
             $table->string("name");
-            $table->string("firtsname");
+            $table->string("firstname");
             $table->string("gender");
             $table->string("identity_number")->nullable();
             $table->foreignId("employee_id")->constrained();
-            $table->foreignId("address_id")->nullable()->constrained();
+            $table->foreignId("address_id")->nullable()->constrained()->cascadeOnDelete();
             $table->softDeletes();
             $table->timestamps();
         });

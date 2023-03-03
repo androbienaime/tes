@@ -1,3 +1,35 @@
+@php
+    use \Illuminate\Support\Facades\Session;
+
+    $routeBreadcrumb = Route::getCurrentRoute()->action["as"];
+    $nameBreadcrumb = "";
+    try{
+        $nameBreadcrumb = ucfirst(explode(".", $routeBreadcrumb)[1]);
+    }catch (Exception $e){
+
+    }
+    if(!Session::exists("sessionBread")){
+        Session::push("sessionBread",
+        ['route'=> $routeBreadcrumb, 'name'=> $nameBreadcrumb]);
+    }else{
+
+        foreach (Session::get("sessionBread") as $sb){
+            if($sb['route'] != $routeBreadcrumb){
+                if($sb['name'] == $nameBreadcrumb){
+                    Session::push("sessionBread",
+                    ['route'=> $routeBreadcrumb, 'name'=> $nameBreadcrumb]);
+                }else{
+                    Session::forget("sessionBread");
+
+                    Session::push("sessionBread",
+                    ['route'=> $routeBreadcrumb, 'name'=> $nameBreadcrumb]);
+                }
+            }
+        }
+
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -12,7 +44,9 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
+        @livewireStyles
         <style>
           [x-cloak] { display: none !important; }
       </style>
@@ -56,114 +90,83 @@
                       <span class="p-2.5"> {{ __("Dashboard") }} </span>
                   </x-side-nav-link>
 
+                    {{-- Account Menu --}}
+                    <x-admin-sidebar-menu-dropdown :iconLeft="'bi bi-person-add'" :titles="'Account'" >
+                        <x-admin-nav-sub-link :href="route('admin.account.index')" :active="request()->routeIs('admin.account.index')" >
+                            <i class="bi bi-1-circle-fill"></i>
+                            {{ __("Register account") }}
+                        </x-admin-nav-sub-link>
 
-                   <!-- Menu DropDown -->
-                <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300
-                cursor-pointer hover:bg-blue-600 text-white" onclick="dropdown('submenu1', 'arrow1')">
-                    <i class="bi bi-person-add"></i>
-                    <div class="flex justify-between w-full items-center">
-                        <span class="text-[15px] ml-4 text-gray-200">{{ __("Account") }}</span>
-                        <span class="text-sm rotate-180" id="arrow1">
-                            <i class="bi bi-chevron-down"></i>
-                        </span>
-                    </div>
-                </div>
+                        <x-admin-nav-sub-link :href="route('admin.deposit.index')">
+                            <i class="bi bi-2-circle-fill"></i>
+                            {{ __("Make deposit") }}
+                        </x-admin-nav-sub-link>
 
-                <!-- SubMenu -->
-                <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-gray-200" id="submenu1">
-                  <a href="{{ route('admin.customer') }}" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                    <i class="bi bi-1-circle-fill"></i>
-                    {{ __("Register account") }}
-                  </a>
-                  <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                    <i class="bi bi-2-circle-fill"></i>
-                    {{ __("Make deposit") }}
-                  </a>
-                  <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                    <i class="bi bi-3-circle-fill"></i>
-                      {{ __("Withdraw") }}
-                  </a>
-              </div>
+                        <x-admin-nav-sub-link >
+                            <i class="bi bi-3-circle-fill"></i>
+                            {{ __("Withdraw") }}
+                        </x-admin-nav-sub-link>
 
+                    </x-admin-sidebar-menu-dropdown>
 
-              <span class="text-gray-700 mt-3">Components</span>
-                <!-- Menu DropDown -->
-                <div class="p-2.5  flex items-center rounded-md px-4 duration-300
-                  cursor-pointer hover:bg-blue-600 text-white" onclick="dropdown('submenu2', 'arrow2')">
-                     <i class="bi bi-people-fill"></i>
-                      <div class="flex justify-between w-full items-center">
-                          <span class="text-[15px] ml-4 text-gray-200">{{ __("Custumers") }}</span>
-                          <span class="text-sm rotate-180" id="arrow2">
-                              <i class="bi bi-chevron-down"></i>
-                          </span>
-                      </div>
-                  </div>
+                <span class="text-gray-700 mt-3">{{ __("Components") }}</span>
+                {{-- Customer Menu --}}
+                <x-admin-sidebar-menu-dropdown :iconLeft="'bi bi-people-fill'" :titles="'Custumers'">
+                    <x-admin-nav-sub-link :href="route('admin.customer.index')">
+                        <i class="bi bi-1-circle-fill"></i>
+                        {{ __("Custumers") }}
+                    </x-admin-nav-sub-link>
 
-                  <!-- SubMenu -->
-                  <div class=" hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-gray-200" id="submenu2">
-                    <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                      <i class="bi bi-1-circle-fill"></i>
-                      {{ __("Custumers") }}
-                    </a>
-                    <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                      <i class="bi bi-2-circle-fill"></i>
-                      {{ __("Adresses") }}
-                    </a>
-                </div>
+                    <x-admin-nav-sub-link >
+                        <i class="bi bi-2-circle-fill"></i>
+                        {{ __("Adresses") }}
+                    </x-admin-nav-sub-link>
 
-                   <!-- Menu DropDown -->
-                   <div class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300
-                   cursor-pointer hover:bg-blue-600 text-white" onclick="dropdown('submenu3', 'arrow3')">
-                       <i class="bi bi-bank2"></i>
-                        <div class="flex justify-between w-full items-center">
-                           <span class="text-[15px] ml-4 text-gray-200">{{ __("Modules") }}</span>
-                           <span class="text-sm rotate-180" id="arrow3">
-                               <i class="bi bi-chevron-down"></i>
-                           </span>
-                       </div>
-                   </div>
+                </x-admin-sidebar-menu-dropdown>
 
-                   <!-- SubMenu -->
-                   <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-gray-200" id="submenu3">
-                    <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                      <i class="bi bi-1-circle-fill"></i>
-                      {{ __("Modules Manager") }}
-                    </a>
-                    <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                      <i class="bi bi-2-circle-fill"></i>
-                      {{ __("Modules Catalog") }}
-                    </a>
-                 </div>
+                {{-- Modules Menu --}}
+                <x-admin-sidebar-menu-dropdown :iconLeft="'bi bi-bank2'" :titles="'Modules'">
+                    <x-admin-nav-sub-link >
+                        <i class="bi bi-1-circle-fill"></i>
+                        {{ __("Modules Manager") }}
+                    </x-admin-nav-sub-link>
 
-                 <span class="text-gray-700 mt-3">Plus</span>
-                  <!-- Menu DropDown -->
-                  <div class="p-2.5 flex items-center rounded-md px-4 duration-300
-                  cursor-pointer hover:bg-blue-600 text-white" onclick="dropdown('submenu4', 'arrow4')">
-                      <i class="bi bi-gear"></i>
-                      <div class="flex justify-between w-full items-center">
-                          <span class="text-[15px] ml-4 text-gray-200">{{ __("Settings") }}</span>
-                          <span class="text-sm rotate-180" id="arrow4">
-                              <i class="bi bi-chevron-down"></i>
-                          </span>
-                      </div>
-                  </div>
+                    <x-admin-nav-sub-link >
+                        <i class="bi bi-2-circle-fill"></i>
+                        {{ __("Modules Catalog") }}
+                    </x-admin-nav-sub-link>
 
-                  <!-- SubMenu -->
-                  <div class="hidden text-left text-sm font-thin mt-2 w-4/5 mx-auto text-gray-200" id="submenu4">
-                    <a href="#" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                      <i class="bi bi-1-circle-fill"></i>
-                      {{ __("Employees") }}
-                    </a>
-                    <a href="{{ route("admin.branch.index") }}" class="block cursor-pointer p-2 hover:bg-gray-700 rounded-md mt-1">
-                      <i class="bi bi-2-circle-fill"></i>
-                      {{ __("Branch") }}
-                    </a>
-                </div>
+                </x-admin-sidebar-menu-dropdown>
 
-                  <x-side-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                <span class="text-gray-700 mt-3">Plus</span>
+                {{-- Setting Menu --}}
+                <x-admin-sidebar-menu-dropdown :iconLeft="'bi bi-gear'" :titles="'Settings'">
+                    <x-admin-nav-sub-link >
+                        <i class="bi bi-1-circle-fill"></i>
+                        {{ __("Employees") }}
+                    </x-admin-nav-sub-link>
+
+                    <x-admin-nav-sub-link :href="route('admin.branch.index')">
+                        <i class="bi bi-2-circle-fill"></i>
+                        {{ __("Branch") }}
+                    </x-admin-nav-sub-link>
+
+                    <x-admin-nav-sub-link :href="route('admin.typeofaccount.index')">
+                        <i class="bi bi-2-circle-fill"></i>
+                        {{ __("Type Of Account") }}
+                    </x-admin-nav-sub-link>
+
+                </x-admin-sidebar-menu-dropdown>
+
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                  <x-side-nav-link href="{{ route('logout') }}" :active="request()->routeIs('logout')"
+                                   onclick="event.preventDefault();
+                                                this.closest('form').submit();">
                     <i class="bi bi-box-arrow-in-right"></i>
                     <span class="p-2.5"> {{ __("Log out") }} </span>
                   </x-side-nav-link>
+                </form>
 
                 </nav>
             </aside>
@@ -184,18 +187,12 @@
               </div>
 
               <div class="">
-                 {{ $slot }}
+                  {{ $slot }}
               </div>
             </main>
           </div>
 
 
-       <script type="text/javascript">
-        function dropdown($nom1, $nom2){
-            document.querySelector("#"+$nom1).classList.toggle("hidden");
-            document.querySelector("#"+$nom2).classList.toggle("rotate-0");
-        }
-        dropdown();
-      </script>
+          @livewireScripts
     </body>
 </html>

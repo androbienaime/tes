@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('type_of_transactions', function (Blueprint $table) {
             $table->id();
             $table->string("name");
+            $table->string("description")->nullable();
             $table->timestamps();
         });
     }

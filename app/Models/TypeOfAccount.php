@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class TypeOfAccount extends Model
 {
+    protected $fillable = ['name', 'price', 'duration'];
     use HasFactory;
 }
