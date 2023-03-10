@@ -8,17 +8,33 @@ use Illuminate\Support\Facades\Validator;
 
 class Account extends Model
 {
-    protected $fillable = ['code', 'type_of_account_id', 'customer_id', 'balance', 'state'];
+    protected $fillable = [
+        'code',
+        'type_of_account_id',
+        'customer_id',
+        'balance',
+        'state'
+    ];
     use HasFactory;
 
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function Customer(){
         return $this->belongsTo(Customer::class);
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function type_of_account(){
         return $this->belongsTo(TypeOfAccount::class);
     }
 
+    /**
+     * @return mixed
+     */
     public static function genAccountsCode(){
         $code = [
             'code' => mt_rand(10000, 99999)

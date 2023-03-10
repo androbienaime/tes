@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\DropDownGeoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dashboard', function () {
-    return view('adminTheme.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin/password/change', function () {
+    return view('auth.passwords.change');
+})->middleware(['auth'])->name('password.change');
+
 
 Route::post('/api/fetch-city', [DropDownGeoController::class, 'fetchcity']);
 Route::post('/api/fetch-state', [DropDownGeoController::class, 'fetchstate']);

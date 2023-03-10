@@ -9,8 +9,10 @@
         <div class="max-w-7xl mx-auto sm:px-4 lg:px-4">
             <div class="overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="">
-                    <x-admin-card />
-                    <livewire:chart-component />
+                    @can("access-settings")
+                        @include("adminTheme.partials.cards")
+                        <livewire:chart-component />
+                    @endcan
                 </div>
             </div>
         </div>

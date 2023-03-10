@@ -7,18 +7,16 @@
                     <!-- Mobile button -->
                    <button type="button" @click="opens = !opens" @click.away="opens = false"
                        class="inline-flex items-center justify-center p-2 rounded-md text-blue-700 hover:bg-yellow-400 focus:outline-none" >
-                       <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                       </svg>
+                        <i class="bi bi-box-arrow-in-right"></i>
                     </button>
 
                </div>
-              
+
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a class="text-white" href="{{ route('dashboard') }}">
-                        <img  src="{{ asset("img/logo.png") }}" class="w-9 object-center	 " alt="LT FINANCE"/> 
-  
+                        <img  src="{{ asset("img/logo.png") }}" class="w-9 object-center	 " alt="LT FINANCE"/>
+
                       </a>
                 </div>
 

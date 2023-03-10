@@ -4,7 +4,7 @@
                 <div class="shadow p-6 rounded-lg bg-white">
                     <div class="md:flex md:justify-between md:items-center">
                         <div>
-                            <h2 class="text-xl text-gray-800 font-bold leading-tight">Product Sales</h2>
+                            <h2 class="text-xl text-gray-800 font-bold leading-tight">{{ __("Amount received per month") }}</h2>
                             <p class="mb-2 text-gray-600 text-sm">Monthly Average</p>
                         </div>
 
@@ -12,7 +12,7 @@
                         <div class="mb-4">
                             <div class="flex items-center">
                                 <div class="w-2 h-2 bg-blue-600 mr-2 rounded-full"></div>
-                                <div class="text-sm text-gray-700">Sales</div>
+                                <div class="text-sm text-gray-700">{{ __("Amount") }}</div>
                             </div>
                         </div>
                     </div>
@@ -64,9 +64,13 @@
         </div>
 
         <script>
+
             function app() {
                 return {
-                    chartData: [112, 10, 225, 134, 101, 80, 50, 100, 200],
+
+                    options: null,
+
+                    chartData: [0, 112],
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
                     tooltipContent: '',
                     tooltipOpen: false,

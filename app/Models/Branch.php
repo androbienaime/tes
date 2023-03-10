@@ -13,4 +13,8 @@ class Branch extends Model
     public function Address(){
         return $this->belongsTo(Address::class);
     }
+
+    public function Employee(){
+        return $this->hasOne(Employee::class);
+    }
 }

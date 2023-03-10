@@ -2,7 +2,7 @@
 
 <label {{ $attributes->merge(
         [
-            'class'=> "block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            'class'=> "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
         ])
         }}
 > {{ $value ?? $slot }}

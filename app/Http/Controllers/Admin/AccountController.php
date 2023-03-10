@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Account;
+use App\Models\Employee;
 use App\Models\TypeOfAccount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
@@ -52,6 +54,7 @@ class AccountController extends Controller
         $account->customer_id = $request->id;
         $account->balance = 0;
         $account->state = true;
+        $account->employee_id = Employee::where('user_id', Auth::user()->getAuthIdentifier())->first()->id;
         $account->save();
 
         $message = " CODE : ".$account->code;

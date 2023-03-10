@@ -25,8 +25,8 @@
 
                 <!-- Name -->
                 <div class="mb-6 ">
-                    <x-input-label for="name" :value="__('Name')" />
-                    <x-text-input id="name" class="block mt-1 w-full" placeholder="" type="text" name="name" :value="old('name')" required autofocus />
+                    <x-label-admin :required="true"  for="name">{{ __("Echelon") }}</x-label-admin>
+                    <x-input-admin id="name" placeholder="" type="text" name="name" :value="old('name')" required autofocus />
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
@@ -43,6 +43,16 @@
                         <x-input-admin type="number" name="duration" placeholder="" required></x-input-admin>
                         <x-input-error :messages="$errors->get('duration')" class="mt-2" />
                     </div>
+                </div>
+
+                    <div>
+                    <x-label-admin :required="true"  for="active_case_payment">{{ __("CASE PAYMENTS") }}</x-label-admin>
+                    <x-select-admin type="text" name="active_case_payment" required>
+                        <option value="0">{{ __("NO") }}</option>
+                        <option value="1">{{ __("YES") }}</option>
+                    </x-select-admin>
+                    <x-input-error :messages="$errors->get('active_case_payment')" class="mt-2" />
+
                 </div>
                 <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ __("Save") }}</button>
             </form>

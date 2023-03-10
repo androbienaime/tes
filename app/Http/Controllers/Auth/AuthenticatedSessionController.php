@@ -29,6 +29,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+
+        if (Auth::user()->first_time_login()) {
+            return redirect()->route('password.change');
+        }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

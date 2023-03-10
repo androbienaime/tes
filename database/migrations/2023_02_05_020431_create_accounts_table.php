@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->integer("code")->nullable(false)->unique()->index();
+            $table->bigInteger("code")->nullable(false)->unique()->index();
             $table->foreignId("type_of_account_id")->constrained();
             $table->foreignId("customer_id")->constrained();
             $table->double("balance")->default(0);

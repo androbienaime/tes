@@ -8,15 +8,35 @@ use Illuminate\Support\Facades\Validator;
 
 class Transaction extends Model
 {
-    protected $fillable = ['account_id', 'amount', 'employee_id', 'type_of_transaction_id'];
+    protected $fillable = [
+        'account_id',
+        'code',
+        'amount',
+        'employee_id',
+        'type_of_transaction_id',
+        'case_payments'
+    ];
     use HasFactory;
+
+    public function Employee(){
+        return $this->belongsTo(Employee::class);
+    }
+
+    public function Type_of_transaction(){
+        return $this->belongsTo(TypeOfTransaction::class);
+    }
+
+    public function Account(){
+        return $this->belongsTo(Account::class);
+    }
+
 
     public static function genTransactionCode(){
         $code = [
-            'code' => mt_rand(10000, 99999)
+            'code' => mt_rand(1000000000, 999999999999)
         ];
 
-        $rules = ['code' => 'unique:accounts'];
+        $rules = ['code' => 'unique:transactions'];
 
         $validate = Validator::make($code, $rules)->passes();
 

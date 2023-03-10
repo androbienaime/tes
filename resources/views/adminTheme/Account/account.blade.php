@@ -40,8 +40,8 @@
         </div>
     </x-primary-panel>
     <div class="">
-        <div class="max-w-7xl sm:px-6 ">
-            <div class="bg-white overflow-hidden shadow-sm ">
+        <div class="max-w-7xl sm:px-6  ">
+            <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg">
                 <div class="p-6 text-gray-900">
                     <livewire:account-table />
                 </div>

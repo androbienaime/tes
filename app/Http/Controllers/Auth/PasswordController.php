@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\Rules\Password;
 
 class PasswordController extends Controller
@@ -22,8 +24,10 @@ class PasswordController extends Controller
 
         $request->user()->update([
             'password' => Hash::make($validated['password']),
+            'first_time_login' => 0
         ]);
 
-        return back()->with('status', 'password-updated');
+        return redirect(RouteServiceProvider::HOME);
+       // return back()->with('status', 'password-updated');
     }
 }

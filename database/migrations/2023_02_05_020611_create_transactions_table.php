@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger("code")->nullable(false)->unique()->index();
             $table->double("amount")->nullable(false);
             $table->foreignId("account_id")->constrained();
             $table->foreignId("employee_id")->constrained();

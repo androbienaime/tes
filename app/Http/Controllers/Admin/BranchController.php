@@ -7,6 +7,7 @@ use AndroLT\Countrypkg\Models\State;
 use App\Events\RegisteredBranchEvent;
 use App\Models\Branch;
 use App\Models\Address;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -15,9 +16,9 @@ use App\Http\Controllers\Controller;
 class BranchController extends Controller
 {
     public function index(){
-        $country = Country::where('name', 'Haiti')->get();
+        $country = Country::where('name', 'Haiti')->first();
 
-        $states = $country[0]->getStates;
+        $states = $country->getStates;
 
         return view("adminTheme.Branch.branch", [
             'states' => $states
@@ -28,9 +29,14 @@ class BranchController extends Controller
     public function create(){
 
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Request $request){
         $validated = $request->validate([
-            'name' => 'required|min:2|max:20',
+            'name' => 'required|min:2|max:20|unique:branches',
             'code' => 'unique:branches',
             'state' => 'required|min:3|max:20',
             'city' => 'required|max:20',
@@ -60,20 +66,20 @@ class BranchController extends Controller
     }
 
     public function edit(Request $request){
-        $country = Country::where('name', 'Haiti')->get();
-        $states = $country[0]->getStates;
+        $country = Country::where('name', 'Haiti')->first();
+        $states = $country->getStates;
 
         $branches = Branch::all();
         $branches = $branches->find($request->branch);
 
 
-        $address = $branches->Address()->get();
+        $address = $branches->Address()->first();
 
 
         return view("adminTheme.Branch.branch",
             [
                 'states' => $states,
-                'address' => $address[0],
+                'address' => $address,
                 'branches' => $branches
             ]
         );

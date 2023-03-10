@@ -13,9 +13,9 @@
         </div>
     </x-slot>
 
-    <x-breadcrumb />
-
     <x-flashmessage :status="session('status')" />
+    <x-flashmessage :warning="true" :status="session('errors2')" />
+
     <!-- Panel -->
 
     <x-primary-panel :cs="'bi bi-cash'" :title="__('To make a deposit')">
@@ -37,6 +37,8 @@
                         <x-input-error :messages="$errors->get('amount')" class="mt-2" />
                     </div>
 
+                    <x-admin-tags-listing />
+
                     <x-primary-button>{{ __("Save") }}</x-primary-button>
                 </x-center-form>
             </form>
@@ -44,9 +46,9 @@
     </x-primary-panel>
     <div class="">
         <div class="max-w-7xl sm:px-6 ">
-            <div class="bg-white overflow-hidden shadow-sm ">
+            <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg ">
                 <div class="p-6 text-gray-900">
-                    <livewire:branch-table />
+                    <livewire:transaction-table />
                 </div>
             </div>
         </div>

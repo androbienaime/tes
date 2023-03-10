@@ -17,4 +17,8 @@ class Address extends Model
     public function Account(){
         return $this->hasOne(Account::class);
     }
+
+    public function Employee(){
+        return $this->hasOne(Account::class);
+    }
 }
