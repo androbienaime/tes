@@ -29,6 +29,8 @@ class WithdrawController extends Controller
 
         $account = Account::where("code", $request->code);
 
+
+
         if($request->amount >= $account->first()->balance){
             $i++;
             $message = "The amount must be less than the amount in their account";
@@ -37,6 +39,11 @@ class WithdrawController extends Controller
         if(!$account->first()->state){
             $i++;
             $message = "This account has been deactivated";
+        }
+
+        if($account->first()->type_of_account->active_case_payments){
+            $i++;
+            $message = "You cannot withdraw from this type of account.";
         }
 
         if($i > 0){

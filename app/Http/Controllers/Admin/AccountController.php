@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AccountHistoryResource;
 use App\Models\Account;
 use App\Models\Employee;
 use App\Models\TypeOfAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
 {
@@ -48,8 +50,9 @@ class AccountController extends Controller
             'id' => 'required'
         ]);
 
+
         $account = new Account();
-        $account->code = Account::genAccountsCode();
+        $account->code = Account::genAccountsCode(TypeOfAccount::find($request->typeofaccount));
         $account->type_of_account_id = $request->typeofaccount;
         $account->customer_id = $request->id;
         $account->balance = 0;
@@ -59,7 +62,7 @@ class AccountController extends Controller
 
         $message = " CODE : ".$account->code;
 
-        return back()->with("status", $message);
+        return back()->with("status", __("Account saved successfully") . " : ". $account->code);
 
     }
 
@@ -106,5 +109,17 @@ class AccountController extends Controller
     public function destroy(Account $account)
     {
         //
+    }
+
+    public function showAccountHistory(Account $account){
+        $result = DB::table("accounts")
+            ->join("transactions", "accounts.id", "=", "transactions.account_id")
+            ->select("accounts.*", "transactions.*")
+            ->where("accounts.id", $account->id)->get();
+
+
+        return view("AdminTheme.Account.history", [
+            "account" => $account
+        ]);
     }
 }

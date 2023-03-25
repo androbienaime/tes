@@ -127,7 +127,7 @@ class TransactionController extends Controller
         try {
             $transaction->account->decrement("balance", $transaction->amount);
 
-            $transaction->forceDelete();
+            $transaction->delete();
 
         }catch (ValidationException $e){
             DB::rollBack();

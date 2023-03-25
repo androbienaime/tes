@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('tags_payments', function (Blueprint $table) {
             $table->id();
-            $table->string("code")->nullable(false)->unique()->index();
-            $table->foreignId("type_of_account_id")->constrained();
-            $table->foreignId("customer_id")->constrained();
-            $table->double("balance")->default(0);
-            $table->string("state")->nullable(false);
-            $table->softDeletes();
+            $table->integer("tags")->nullable(false);
+            $table->foreignId("account_id")->constrained();
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('tags_payments');
     }
 };

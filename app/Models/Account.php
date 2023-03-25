@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Validator;
 
 class Account extends Model
@@ -32,10 +34,19 @@ class Account extends Model
         return $this->belongsTo(TypeOfAccount::class);
     }
 
+    public function transactions() : HasMany
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function tagspayment() : HasMany{
+        return $this->hasMany(TagsPayment::class, 'account_id');
+    }
+
     /**
      * @return mixed
      */
-    public static function genAccountsCode(){
+    public static function genAccountsCode(TypeOfAccount $typeOfAccount){
         $code = [
             'code' => mt_rand(10000, 99999)
         ];
@@ -44,6 +55,6 @@ class Account extends Model
 
         $validate = Validator::make($code, $rules)->passes();
 
-        return $validate ? $code['code'] : self::genAccountsCode();
+        return $validate ? $typeOfAccount->prefix.'-'.$code['code'] : self::genAccountsCode();
     }
 }

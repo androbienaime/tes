@@ -11,6 +11,8 @@ use App\Models\Address;
 use App\Models\Customer;
 use App\Models\CustomerAddress;
 use App\Models\Employee;
+use App\Models\reference_person;
+use App\Models\ReferencePerson;
 use App\Models\TypeOfAccount;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -71,11 +73,13 @@ class CustomerController extends Controller
            'last_name' => 'required|min:3',
            'first_name' => 'required|min:3',
            'gender' => 'required',
-           'identity_number' => 'nullable|integer|min:10',
+           'identity_number' => 'nullable|min:10',
             'email' => 'nullable',
             'country' => 'required',
             'city' => 'required',
-            'phone' => 'nullable|integer|min:8'
+            'phone' => 'nullable|min:8',
+            'reference_person' => 'nullable|min:3',
+            'phone2' => 'nullable|min:8'
         ]);
 
 
@@ -102,13 +106,21 @@ class CustomerController extends Controller
 
 
             $account = new Account();
-            $account->code = Account::genAccountsCode();
+            $account->code = Account::genAccountsCode(TypeOfAccount::find($request->typeofaccount));
             $account->type_of_account_id = $request->typeofaccount;
             $account->customer_id = $customer->id;
             $account->balance = 0;
             $account->employee_id = Employee::where('user_id', Auth::user()->getAuthIdentifier())->first()->id;
             $account->state = true;
             $account->save();
+
+            if($request->reference_person != null) {
+                $reference_person = new ReferencePerson();
+                $reference_person->full_name = $request->reference_person;
+                $reference_person->phone = $request->phone_2;
+                $reference_person->customer_id = $customer->id;
+                $reference_person->save();
+            }
 
         }catch (ValidationException $e){
             DB::rollBack();
@@ -117,7 +129,7 @@ class CustomerController extends Controller
 
         DB::commit();
 
-       return back()->with("status", __("Customer saved successfully"));
+       return back()->with("status", __("Customer saved successfully") . " : ". $account->code);
    }
 
     /**
@@ -143,11 +155,11 @@ class CustomerController extends Controller
            'last_name' => 'required|min:3',
            'first_name' => 'required|min:3',
            'gender' => 'required',
-           'identity_number' => 'nullable|integer|min:10',
+           'identity_number' => 'nullable|min:8',
            'email' => 'nullable',
            'country' => 'required',
            'city' => 'required',
-           'phone' => 'nullable|integer'
+           'phone' => 'required|min:4'
        ]);
 
        DB::beginTransaction();
@@ -180,6 +192,7 @@ class CustomerController extends Controller
        return back()->with("status", __("Customer update successfully"));
    }
 
+
     /**
      * @return mixed
      */
@@ -198,9 +211,13 @@ class CustomerController extends Controller
     public function getcustomers(Request $request){
         if(strlen($request->search) > 1 ) {
             $req = '%' . $request->search . '%';
-            $c = Customer::where("name", 'like', $req)
-                ->orWhere("firstname", "like", $req)
-                ->orWhere("code", "like", $req)->get();
+            $c = DB::table("customers")
+                ->join("addresses", "customers.id", "=", "addresses.id")
+                ->select("customers.*", "addresses.phone as phone")
+                ->where("customers.name", 'like', $req)
+                ->orWhere("customers.firstname", "like", $req)
+                ->orWhere("customers.code", "like", $req)
+                ->get();
 
             if (count($c) > 0) {
                 $customers = $c;

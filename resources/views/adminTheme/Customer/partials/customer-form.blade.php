@@ -35,9 +35,10 @@
 
             <div>
                 <x-label-admin for="identity_number">{{ __("Identity number") }}</x-label-admin>
-                <x-input-admin type="text" name="identity_number" placeholder="" :value="old('identity_number', $customer->identity_number)"></x-input-admin>
+                <x-admin-id-mask :names="'identity_number'" :value="old('identity_number', $customer->identity_number)"/>
                 <x-input-error :messages="$errors->get('identity_number')" class="mt-2" />
             </div>
+
             <div>
                 <x-label-admin for="email">{{ __("Email address") }}</x-label-admin>
                 <x-input-admin type="email" name="email" :value="old('email', $customer->address->email)"></x-input-admin>
@@ -73,8 +74,8 @@
             </div>
 
             <div>
-                <x-label-admin for="phone">{{ __("Phone") }}</x-label-admin>
-                <x-input-admin type="phone" name="phone" placeholder="+509 xxx xx xx" :value="old('phone', $customer->address->phone)" ></x-input-admin>
+                <x-label-admin :required="true" for="phone">{{ __("Phone") }}</x-label-admin>
+                <x-admin-input-mask-phone :names="'phone'" :value="old('phone', $customer->address->phone)"/>
                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
             </div>
 
@@ -85,6 +86,18 @@
                         <option {{ $typeofaccount->id == $customer->typeofaccount ? 'selected' : '' }} value="{{ $typeofaccount->id}}">{{ $typeofaccount->name}}</option>
                     @endforeach
                 </select>
+            </div>
+
+            <div>
+                <x-label-admin for="references_person">{{ __("Reference person") }}</x-label-admin>
+                <x-input-admin type="text" name="reference_person" placeholder=" " :value="old('reference_person')"  ></x-input-admin>
+                <x-input-error :messages="$errors->get('references_person')" class="mt-2" />
+            </div>
+
+            <div>
+                <x-label-admin for="phone_2">{{ __("Telephone number") }}</x-label-admin>
+                <x-admin-input-mask-phone :names="'phone_2'" :value="old('phone_2')"/>
+                <x-input-error :messages="$errors->get('phone2')" class="mt-2" />
             </div>
         </div>
         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ __("Save") }}</button>

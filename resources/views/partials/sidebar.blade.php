@@ -1,6 +1,9 @@
 <!-- Sidebar -->
 <aside :class="{ '-translate-x-full': !opens }" class="md:fixed lg:fixed right-0 z-10 bg-gray-900 text-blue-100 w-64 px-2 py-4 absolute inset-y-0 left-0 md:relative transform
-             md:translate-x-0 overflow-auto  transition ease-in-out duration-200 shadow-lg">
+             md:translate-x-0 overflow-y-scroll scrollbar-thin
+             scrollbar-thumb-gray-600 hover:scrollbar-thumb-blue-500
+             hover:scrollbar-track-gray-200 hover:scrollbar-thumb-rounded-full
+             hover:scrollbar-track-rounded-full hover:scrollbar-track-shadow-md  transition ease-in-out duration-200 shadow-lg">
     <!-- Logo -->
     <div class="flex align-items-center justify-between px-2">
         <div class="block flex items-center space-x-2">

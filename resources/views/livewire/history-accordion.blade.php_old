@@ -1,0 +1,51 @@
+@php $i=0 @endphp
+<div>
+    <div class="container sm:px-8 max-w-screen-md text-gray-700">
+        <section class="mb-12">
+            <div class="p-2 ">
+               <span>
+                   <h2 class="text-2xl text-bold">{{ __("No Account") . ' : ' . $account->code }}</h2>
+               </span>
+                <div x-data="dataPeople()" x-init="fetchPeople()">
+                    <input type="search"  wire:model="search" x-on:keydown.window.prevent.slash="$refs.searchField.focus()" placeholder="Who are you looking for?" type="search" class="block w-full bg-gray-200 focus:outline-none focus:bg-white focus:shadow text-gray-700 font-bold rounded-lg px-4 py-3 my-3" />
+                    <p x-show="search !== ''" class="my-2">
+                        You are looking for <span x-text="search" class="font-bold"></span>
+                    </p>
+                </div>
+                @foreach($history as $his)
+                        <div class="mb-3 mx-auto space-y-4 lg:space-y-6" x-data="{faq_selected: null, index: {{ $i++ }} }">
+                            <div>
+
+                                <div class="item bg-white shadow-md rounded-md p-3">
+                                    <div class="flex items-center cursor-pointer" @click="faq_selected !== index ? faq_selected = index : faq_selected = null">
+                                        <div class="bg-indigo-100 text-indigo-400 w-8 h-8 md:w-10 md:h-10 rounded-md flex items-center justify-center font-bold text-lg font-display">
+                                            <span x-text="index + 1"></span>
+                                        </div>
+                                        <div class="ml-3 md:ml-4 lg:ml-6 md:text-lg text-indigo-600">
+                                            <span > {{ $his->created_at->format("d/m/Y") }} </span>
+                                        </div>
+                                    </div>
+                                    <div id="printableArea" class="relative overflow-hidden transition-all max-h-0 duration-700" x-bind:style="faq_selected === index ? `max-height:  ${ $el.scrollHeight }px` : ``" >
+                                        <div class="text-gray-700 ml-8 md:ml-10 pl-3 md:pl-4 lg:pl-6 py-2 space-y-3 pb-10">
+                                            <x-html-print>
+                                                <div>
+                                                    <p>Nom client : {{ $account->customer->firstname . ' ' . $account->customer->name }}</p>
+                                                    <p>No Account : {{ $account->code }}</p>
+                                                    <p>Montant : {{ $his->amount }} Htg</p>
+                                                    <p>Date : {{ $his->created_at->format("m/d/Y a H:i:s") }}</p>
+                                                </div>
+                                            </x-html-print>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                @endforeach
+                    </div>
+            </div>
+        </section>
+    </div>
+</div>

@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('reference_people', function (Blueprint $table) {
             $table->id();
-            $table->string("code")->nullable(false)->unique()->index();
-            $table->foreignId("type_of_account_id")->constrained();
+            $table->string("full_name");
+            $table->string("phone")->nullable(true);
             $table->foreignId("customer_id")->constrained();
-            $table->double("balance")->default(0);
-            $table->string("state")->nullable(false);
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('reference_people');
     }
 };

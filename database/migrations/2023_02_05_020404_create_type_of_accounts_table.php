@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("name")->nullable(false);
             $table->integer("price")->nullable();
             $table->integer("duration");
+            $table->string("prefix");
             $table->string("description")->nullable();
             $table->timestamps();
         });

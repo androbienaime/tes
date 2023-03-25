@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="w-full items-center flex">
                                             <div class="mx-2 -mt-1"><span x-text="option.firstname + ' ' + option.name"></span>
-                                                <div class="text-xs truncate w-full normal-case font-normal -mt-1 text-gray-500" x-text="option.email"></div>
+                                                <div class="text-xs truncate w-full normal-case font-normal -mt-1 text-gray-500" x-text="'Phone : ' + option.phone"></div>
                                             </div>
                                         </div>
                                     </div>

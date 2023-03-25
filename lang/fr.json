@@ -73,5 +73,13 @@
     "Customer saved successfully" : "Client enregistré avec succès",
     "Customer Information" : "Informations client",
     "Update customer information" : "Mettre à jour les informations client",
-    "Customer update successfully" : "Mise à jour du client réussie"
+    "Customer update successfully" : "Mise à jour du client réussie",
+    "Update Password" : "Mettre à jour le mot de passe",
+    "Ensure your account is using a long, random password to stay secure." : "Assurez-vous que votre compte utilise un mot de passe long et aléatoire pour rester en sécurité.",
+    "Current Password": "Mot de passe actuel",
+    "New Password" : "Nouveau mot de passe",
+    "Confirm Password" : "Confirmez le mot de passe",
+    "You cannot withdraw from this type of account." : "Vous ne pouvez pas faire de retrait sur ce type de compte.",
+    "This account has been deactivated" : "Ce compte a été désactivé",
+    "The amount must be less than the amount in their account" : "Le montant doit être inférieur au montant de leur compte"
 }

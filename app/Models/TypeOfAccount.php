@@ -11,7 +11,8 @@ class TypeOfAccount extends Model
         'name',
         'price',
         'duration',
-        'active_case_payments'
+        'active_case_payments',
+        'prefix'
     ];
     use HasFactory;
 }

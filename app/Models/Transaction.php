@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 
 class Transaction extends Model
@@ -16,7 +17,7 @@ class Transaction extends Model
         'type_of_transaction_id',
         'case_payments'
     ];
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public function Employee(){
         return $this->belongsTo(Employee::class);

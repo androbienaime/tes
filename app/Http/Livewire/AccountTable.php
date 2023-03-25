@@ -6,6 +6,8 @@ use Rappasoft\LaravelLivewireTables\DataTableComponent;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use App\Models\Account;
 use Rappasoft\LaravelLivewireTables\Views\Columns\BooleanColumn;
+use Rappasoft\LaravelLivewireTables\Views\Columns\ButtonGroupColumn;
+use Rappasoft\LaravelLivewireTables\Views\Columns\LinkColumn;
 
 class AccountTable extends DataTableComponent
 {
@@ -35,11 +37,37 @@ class AccountTable extends DataTableComponent
             Column::make("Balance", "balance")
                 ->sortable(),
             BooleanColumn::make('Active', "state")
-                ->view("adminTheme.Account.partials.state-view"),
-            Column::make("Created at", "created_at")
-                ->sortable(),
-            Column::make("Updated at", "updated_at")
-                ->sortable(),
+                ->view("adminTheme.Account.livewire.btn.state-view"),
+            ButtonGroupColumn::make("Action", 'id')
+                ->buttons([
+                    LinkColumn::make('') // make() has no effect in this case but needs to be set anyway
+                    ->title(fn($row) => '')
+                        ->location(fn($row) => route('admin.account.show.history', $row))
+                        ->attributes(function($row) {
+                            return [
+                                'target' => '_blank',
+                                'class' => 'bi bi-eye-fill text-blue-600 hover:text-gray-800'
+                            ];
+                        }),
+                    LinkColumn::make('') // make() has no effect in this case but needs to be set anyway
+                    ->title(fn($row) => '')
+                        ->location(fn($row) => route('admin.account.show', $row))
+                        ->attributes(function($row) {
+                            return [
+                                'target' => '_blank',
+                                'class' => 'px-2 bi bi-pencil-square text-blue-600 hover:text-gray-800'
+                            ];
+                        }),
+                    LinkColumn::make('') // make() has no effect in this case but needs to be set anyway
+                    ->title(fn($row) => '')
+                        ->location(fn($row) => route('admin.account.show', $row))
+                        ->attributes(function($row) {
+                            return [
+                                'target' => '_blank',
+                                'class' => 'px-2 bi bi-trash3 text-red-600 hover:text-gray-800'
+                            ];
+                        }),
+                ]),
         ];
     }
 }

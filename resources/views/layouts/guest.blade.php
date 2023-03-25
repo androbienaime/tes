@@ -20,11 +20,17 @@
                 <a href="/">
                     <img class="mx-auto" src="{{ asset("img/logo.png") }}" alt="LT FINANCE"/>
                 </a>
+                <span class="block py-2 text-xs text-gray-600 sm:text-center  text-center dark:text-gray-400">Version 1.0.0</span>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-3/4 sm:max-w-md sm:px-6 lg:px-8 mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
                 {{ $slot }}
             </div>
+
+            <div class="py-6">
+                @include("AdminTheme.partials.footer")
+            </div>
         </div>
+
     </body>
 </html>

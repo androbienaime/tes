@@ -25,4 +25,8 @@ class Customer extends Model
     public function Account(){
         return $this->belongsTo(Account::class);
     }
+
+    public function Referenceperson(){
+        return $this->hasMany(ReferencePerson::class);
+    }
 }
