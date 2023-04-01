@@ -73,6 +73,8 @@ class TransactionTable extends DataTableComponent
             Column::make("Account id", "account_id")
                 ->sortable()
                 ->hideIf(true),
+            Column::make("No Account", "account.code")
+                ->sortable(),
             Column::make(__("CUSTOMER NAME"), "account.customer.name")
                 ->sortable()
                 ->searchable(),

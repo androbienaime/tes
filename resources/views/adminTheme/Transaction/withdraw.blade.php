@@ -14,7 +14,7 @@
     </x-slot>
 
     <x-flashmessage :status="session('status')" />
-    <x-flashmessage :class="'bg-red-100 border-red-400 text-red-700'" :status="session('errors2')" />
+    <x-flashmessage :status="session('error')" :warning="true" />
 
     <!-- Panel -->
 

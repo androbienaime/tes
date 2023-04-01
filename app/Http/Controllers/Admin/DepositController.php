@@ -39,7 +39,6 @@ class DepositController extends Controller
                 'numberTag' => "required"
             ]);
 
-           $numberTag = implode(',', $request->numberTag);
         }
 
         DB::beginTransaction();
@@ -52,14 +51,36 @@ class DepositController extends Controller
                 $account->increment("balance", $request->amount);
 
 
-                Transaction::create([
+                $transaction = Transaction::create([
                     'amount' => $request->amount,
                     'code' => Transaction::genTransactionCode(),
                     'account_id' => Account::where("code", $request->code)->first()->id,
                     'employee_id' => Employee::where('user_id', Auth::user()->getAuthIdentifier())->first()->id,
                     'type_of_transaction_id' => TypeOfTransaction::where("name", "DEPOSIT")->first()->id,
-                    'case_payments' => $numberTag
                 ]);
+
+                if($account->first()->type_of_account->active_case_payments) {
+                    $tags = array();
+                    $somme = 0;
+                    $i=0;
+                    foreach ($request->numberTag as $nbt){
+                        $arr = ["tags" => $nbt,
+                            "transaction_id" => $transaction->id];
+
+                            array_push($tags, $arr);
+
+                            $somme += $nbt * $account->first()->type_of_account->price;
+                        $i++;
+                    }
+
+                    if($request->amount < $somme){
+                        return back()->with("errors2",
+                            __("Erreur montant : " . $request->amount . " Gourdes est inferieur a la somme des differents tags : " . implode(', ', $request->numberTag)));
+                    }
+
+                    $account->first()->tagspayment()->createMany($tags);
+                    $account->first()->save();
+                }
 
 
             }catch (ValidationException $e){

@@ -80,15 +80,6 @@
             </div>
 
             <div>
-                <x-label-admin for="typeofaccount">{{ __("Type Of Account") }}</x-label-admin>
-                <select id="typeofaccount" name="typeofaccount" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                    @foreach($typeofaccounts as $typeofaccount)
-                        <option {{ $typeofaccount->id == $customer->typeofaccount ? 'selected' : '' }} value="{{ $typeofaccount->id}}">{{ $typeofaccount->name}}</option>
-                    @endforeach
-                </select>
-            </div>
-
-            <div>
                 <x-label-admin for="references_person">{{ __("Reference person") }}</x-label-admin>
                 <x-input-admin type="text" name="reference_person" placeholder=" " :value="old('reference_person')"  ></x-input-admin>
                 <x-input-error :messages="$errors->get('references_person')" class="mt-2" />

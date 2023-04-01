@@ -42,8 +42,6 @@ class EmployeeController extends Controller
 
         $this->roles = Role::all();
         $this->branches = Branch::all();
-
-
     }
     /**
      * Display a listing of the resource.
@@ -85,10 +83,10 @@ class EmployeeController extends Controller
             'first_name' => 'required|min:3',
             'nickname' => 'required|min:2',
             'gender' => 'required',
-            'identity_number' => 'nullable|integer|min:10',
+            'identity_number' => 'nullable|min:10',
             'country' => 'required',
             'city' => 'required',
-            'phone' => 'nullable|integer',
+            'phone' => 'nullable|min:8',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -176,10 +174,10 @@ class EmployeeController extends Controller
             'first_name' => 'required|min:3',
             'nickname' => 'required|min:3',
             'gender' => 'required',
-            'identity_number' => 'nullable|integer|min:10',
+            'identity_number' => 'nullable|min:10',
             'country' => 'required',
             'city' => 'required',
-            'phone' => 'nullable|integer',
+            'phone' => 'nullable|min:8',
         ]);
 
 
@@ -228,20 +226,31 @@ class EmployeeController extends Controller
      */
     public function destroy(Request $request, Employee $employee)
     {
-//        $request->validateWithBag('userDeletion', [
-//            'password' => ['required', 'current-password'],
-//        ]);
-//
-//        $user = $request->user();
-//
-//        if($user == $employee){
-//            return back()->with("errors2", "Error deteled succesfully");
-//        }else {
-//            $employee->delete();
-//        }
-//
-//        return back()->with("status", "Employee deteled succesfully");
-//
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current-password'],
+        ]);
+
+        $userDeleted = DB::table("users")->where("id", "=", $employee->user_id)->first();
+
+        $user = $request->user();
+
+        if ($userDeleted->deleted_at == null){
+            if ($user == $employee->user()->first()) {
+                return back()->with("error", "Error deteled");
+            } else {
+                $employee->user()->first()->delete();
+                $message = "Employee deteled succesfully";
+            }
+        }else{
+            $message = "The employee has been restored succesfully";
+            $userDeleted->deleted_at = null;
+            DB::table("users")->where("id", "=", $employee->user_id)->update([
+                "deleted_at" => null
+            ]);
+        }
+
+        return back()->with("status", $message);
+
     }
 
     public function updatePassword(Request $request)
@@ -257,5 +266,19 @@ class EmployeeController extends Controller
         ]);
 
         return back()->with('status', 'Your change has been made successfully');
+    }
+
+    public function beforedestroy(Employee $employee)
+    {
+        $userDeleted = false;
+        $user = DB::table("users")->where("id", "=", $employee->user_id)->first();
+
+        if($user->deleted_at != null){
+            $userDeleted = true;
+        }
+        return view("adminTheme.Team.Employee.destroy", [
+            "employee" => $employee,
+            "userDeleted" => $userDeleted
+        ]);
     }
 }

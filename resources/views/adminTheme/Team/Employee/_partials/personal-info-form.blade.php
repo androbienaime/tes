@@ -1,3 +1,6 @@
+@php
+
+@endphp
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
@@ -42,10 +45,11 @@
             </div>
 
             <div>
-                <x-label-admin :required="true" for="identity_number">{{ __("Identity number") }}</x-label-admin>
-                <x-input-admin type="text" name="identity_number" :value="old('identity_number', $employee->identity_number)" placeholder=""></x-input-admin>
+                <x-label-admin for="identity_number">{{ __("Identity number") }}</x-label-admin>
+                <x-admin-id-mask :names="'identity_number'" :value="old('identity_number', $employee->identity_number)"/>
                 <x-input-error :messages="$errors->get('identity_number')" class="mt-2" />
             </div>
+
             <div>
                 <x-label-admin :required="true" for="email">{{ __("Email address") }}</x-label-admin>
                 <x-input-admin type="email" name="email" :value="old('email', $employee->user->email)"  placeholder="eugenedoudeline@lestruviens.com"></x-input-admin>
@@ -57,7 +61,7 @@
                 <x-label-admin :required="true"  for="country" >{{ __("Country") }}</x-label-admin>
                 <x-select-admin id="country2" type="text" name="country" required>
                     @foreach($countries as $country)
-                        <option {{ $country->id == $employee->address->country ? 'selected' : '' }} value="{{ $country->id}}">{{ $country->name}}</option>
+                        <option @if($employee->address != null) {{ $country->id == $employee->address->country ? 'selected' : '' }} @endif value="{{ $country->id}}">{{ $country->name}}</option>
                     @endforeach
                 </x-select-admin>
                 <x-input-error :messages="$errors->get('country')" class="mt-2" />
@@ -67,7 +71,7 @@
                 <x-label-admin :required="true"  for="state" va>{{ __("Department") }}</x-label-admin>
                 <x-select-admin id="state2" type="text" name="state" required>
                     @foreach($states as $state)
-                        <option value="{{ $state->id}}" {{ $state->id == $employee->address->state ? 'selected' : '' }} >{{ $state->name}}</option>
+                        <option value="{{ $state->id}}" @if($employee->address != null)  {{ $state->id == $employee->address->state ? 'selected' : '' }} @endif >{{ $state->name}}</option>
                     @endforeach
                 </x-select-admin>
                 <x-input-error :messages="$errors->get('state')" class="mt-2" />
@@ -75,13 +79,13 @@
 
             <div>
                 <x-label-admin :required="true"  for="city">{{ __("City") }}</x-label-admin>
-                <x-input-admin type="text" name="city" placeholder="Trou-du-Nord" :value="old('city', $employee->address->city)"  required></x-input-admin>
+                <x-input-admin type="text" name="city" placeholder="Trou-du-Nord" required  :value="old('city', $employee->address->city)"   />
                 <x-input-error :messages="$errors->get('city')" class="mt-2" />
             </div>
 
             <div>
                 <x-label-admin :required="true" for="phone">{{ __("Phone") }}</x-label-admin>
-                <x-input-admin type="phone" name="phone" placeholder="+509 xxx xx xx"  :value="old('phone', $employee->address->phone)"></x-input-admin>
+                <x-admin-input-mask-phone :names="'phone'"  :value="old('phone', $employee->address->phone)"  />
                 <x-input-error :messages="$errors->get('phone')" class="mt-2" />
             </div>
 
@@ -99,7 +103,8 @@
                 <x-label-admin :required="true"  for="role" >{{ __("Role") }}</x-label-admin>
                 <x-select-admin id="role" type="text" name="role" required>
                     @foreach($roles as $role)
-                        <option {{ $role->id == $employee->user->roles->first()->id ? 'selected' : '' }}" value="{{ $role->id }}">{{ $role->name}}</option>
+
+                        <option {{ $role->id == $employee->user->roles->first()->id ? 'selected=' : ' ' }}" value="{{ $role->id }}">{{ $role->name}}</option>
                     @endforeach
                 </x-select-admin>
                 <x-input-error :messages="$errors->get('state')" class="mt-2" />

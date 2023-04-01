@@ -1,7 +1,11 @@
 <x-admin-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Report of Employee') }}
+            :
+            <span class="text-blue-500">
+                {{ strtoupper($employee->firstname . ' ' . $employee->lastname) }}
+            </span>
         </h2>
     </x-slot>
 

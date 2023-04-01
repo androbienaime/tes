@@ -3,7 +3,7 @@
     <x-slot name="header">
         <div class="flex flex-row">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Type Of Account') }}
+                {{ __("Update ") . __('Type Of Account') }}
             </h2>
 
             <!-- Right position -->
@@ -13,18 +13,20 @@
         </div>
     </x-slot>
 
+    <x-breadcrumb />
+
     <x-flashmessage :status="session('status')" />
     <!-- Panel -->
 
     <x-primary-panel :cs="'bi bi-git'" :title="__('Add a Branch')">
         <div class="flex mx-auto w-1/2 p-5 items-center">
-            <form method="POST" action="{{ route("admin.typeofaccount.store") }}">
-                @csrf
-
-                <!-- Name -->
+            <form method="POST" action="{{ route("admin.typeofaccount.index") }}">
+            @csrf
+            @method('patch')
+            <!-- Name -->
                 <div class="mb-3 ">
                     <x-label-admin :required="true"  for="name">{{ __("Echelon") }}</x-label-admin>
-                    <x-input-admin id="name" placeholder="" type="text" name="name" :value="old('name')" required autofocus />
+                    <x-input-admin id="name" placeholder="" type="text" name="name" :value="old('name', $typeofaccount->name)" required autofocus />
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 

@@ -44,10 +44,8 @@
                 </div>
 
                 <div>
-                  <x-label-admin for="city">{{ __("City") }}</x-label-admin>
-                  <x-select-admin id="city2" type="text" name="city" required>
-                      <option value="">{{ __("Select City") }}</option>
-                  </x-select-admin>
+                    <x-label-admin for="city">{{ __("City") }}</x-label-admin>
+                    <x-input-admin type="text" name="city" placeholder="Trou-du-Nord" required></x-input-admin>
                     <x-input-error :messages="$errors->get('city')" class="mt-2" />
                 </div>
 
@@ -58,8 +56,8 @@
                 </div>
 
                 <div>
-                    <x-label-admin for="phone">{{ __("Phone") }}</x-label-admin>
-                    <x-input-admin type="text" name="phone" placeholder="+509 33356231"></x-input-admin>
+                    <x-label-admin  for="phone">{{ __("Phone") }}</x-label-admin>
+                    <x-admin-input-mask-phone :names="'phone'" :value="old('phone')"/>
                     <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
             </div>
@@ -77,28 +75,28 @@
     </div>
 </div>
 
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $("#state2").change(function (event){
-                var id_state = this.value;
-                $("#city2").html('');
+{{--    <script type="text/javascript">--}}
+{{--        $(document).ready(function(){--}}
+{{--            $("#state2").change(function (event){--}}
+{{--                var id_state = this.value;--}}
+{{--                $("#city2").html('');--}}
 
-                $.ajax({
-                    url: '/api/fetch-city',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {state_id : id_state,_token: "{{ csrf_token() }}"},
-                    success:function (response){
-                        $("#city2").html("<option value=''>{{ __("Select City") }}</option>");
-                        $.each(response.cities, function (index, val){
-                            $("#city2").append("<option value='"+val.name+"'>"+val.name+"</option>");
-                        });
-                    }
-                });
-            });
+{{--                $.ajax({--}}
+{{--                    url: '/api/fetch-city',--}}
+{{--                    type: 'POST',--}}
+{{--                    dataType: 'json',--}}
+{{--                    data: {state_id : id_state,_token: "{{ csrf_token() }}"},--}}
+{{--                    success:function (response){--}}
+{{--                        $("#city2").html("<option value=''>{{ __("Select City") }}</option>");--}}
+{{--                        $.each(response.cities, function (index, val){--}}
+{{--                            $("#city2").append("<option value='"+val.name+"'>"+val.name+"</option>");--}}
+{{--                        });--}}
+{{--                    }--}}
+{{--                });--}}
+{{--            });--}}
 
 
-        });
+{{--        });--}}
 
-    </script>
+{{--    </script>--}}
 </x-admin-layout>

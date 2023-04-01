@@ -47,7 +47,7 @@ class WithdrawController extends Controller
         }
 
         if($i > 0){
-            return back()->with("errors2", __($message));
+            return back()->with("error", __($message));
         }
 
         DB::beginTransaction();

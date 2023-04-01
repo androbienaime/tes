@@ -81,5 +81,16 @@
     "Confirm Password" : "Confirmez le mot de passe",
     "You cannot withdraw from this type of account." : "Vous ne pouvez pas faire de retrait sur ce type de compte.",
     "This account has been deactivated" : "Ce compte a été désactivé",
-    "The amount must be less than the amount in their account" : "Le montant doit être inférieur au montant de leur compte"
+    "The amount must be less than the amount in their account" : "Le montant doit être inférieur au montant de leur compte",
+    "Sorry you cannot edit this account. Please contact an administrator":
+        "Desole vous ne pouvez pas modifier ce compte. Veuillez contacter un administrateur ",
+    "The account has been modified": "Le compte a été modifier",
+    "Account Management" : "Gestion Compte",
+    "Update" : "Modifier",
+    "Update an Account" : "Modifier compte",
+    "January" : "Janvier",
+    "Febrary" : "Fevrier",
+    "March" : "Mars",
+    "Current balance" : "BALANCE ACTUELLE"
+
 }

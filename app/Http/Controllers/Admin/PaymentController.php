@@ -37,10 +37,6 @@ class PaymentController extends Controller
 
         $account = Account::where("code", $request->code);
 
-        if($request->amount >= $account->first()->balance){
-            $i++;
-            $message = "The amount must be less than the amount in their account";
-        }
 
         if(!$account->first()->state){
             $i++;
@@ -48,7 +44,7 @@ class PaymentController extends Controller
         }
 
         if($i > 0){
-            return back()->with("errors2", __($message));
+            return back()->with("error", __($message));
         }
 
         DB::beginTransaction();

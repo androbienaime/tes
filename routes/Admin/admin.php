@@ -17,8 +17,8 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], func
     Route::resource('account', 'App\Http\Controllers\Admin\AccountController');
 
     Route::group(['middleware' => "can:access-settings"], function (){
-        Route::resource('typeofaccount', 'App\Http\Controllers\Admin\TypeOfAccountController')->only(['store', 'index', 'edit']);
-        Route::resource('branch', 'App\Http\Controllers\Admin\BranchController')->only(['store', 'index', 'edit']);
+        Route::resource('typeofaccount', 'App\Http\Controllers\Admin\TypeOfAccountController');
+        Route::resource('branch', 'App\Http\Controllers\Admin\BranchController');
         Route::resource('employee', 'App\Http\Controllers\Admin\EmployeeController');
         Route::resource('report', 'App\Http\Controllers\Admin\ReportController');
 
@@ -26,6 +26,10 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], func
 
         Route::put('password', [EmployeeController::class, 'updatePassword'])->name('employee.updatePassword');
 
+        Route::get('branch/report/history/{branch}', [ReportController::class, 'showBranchHistory'])->name("branch.show.history");
+
+        Route::get('employee/report/history/{employee}', [ReportController::class, 'showEmployeeHistory'])->name("employee.show.history");
+        Route::get('employee/beforedelete/{employee}', [EmployeeController::class, 'beforedestroy'])->name("employee.beforedestroy");
 
         // Account Activity
         Route::get('account/history/{account}', [AccountController::class, 'showAccountHistory'])->name("account.show.history");

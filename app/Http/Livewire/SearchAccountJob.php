@@ -20,7 +20,6 @@ class SearchAccountJob extends Component
         if(strlen($this->query) > 2) {
             $account = Account::where("code", $this->query)->first();
 
-
             if($account){
                 $this->customer = $account->customer->firstname . " " . $account->customer->name;
                 $this->current_balance = $account->balance;
@@ -32,8 +31,6 @@ class SearchAccountJob extends Component
                 $this->error = "Aucun client ne corespond a ce code";
 
             }
-
-
         }
 
     }

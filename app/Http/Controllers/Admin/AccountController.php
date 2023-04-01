@@ -85,7 +85,13 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        //
+        if(!$account){
+            abort(404);
+        }
+        return view("adminTheme.Account.edit", [
+            "account" => $account,
+            "typeofaccounts" => TypeOfAccount::all()
+        ]);
     }
 
     /**
@@ -97,7 +103,20 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        if($account->transactions->count() > 0){
+            $message = "Sorry you cannot edit this account. Please contact an administrator";
+            return back()->with("error", __($message));
+        }else{
+
+            $account->update([
+               'type_of_account_id' => $request->typeofaccount
+            ]);
+
+            $message = "The account has been modified";
+            $status = "status";
+        }
+
+        return back()->with($status, __($message));
     }
 
     /**

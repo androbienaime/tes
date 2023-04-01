@@ -22,9 +22,9 @@
             return {
                 intCodesID: [
                     {
-                        name: "NIU",
-                        dial_code: "NIU",
-                        code: "NIU",
+                        name: "NINU",
+                        dial_code: "NINU",
+                        code: "NINU",
                         format: '9999999999'
                     },
                     {
@@ -34,7 +34,7 @@
                         format: '999-999-999-9'
                     }
                 ],
-                selectedDialCodeID: 'NIU',
+                selectedDialCodeID: 'NINU',
                 selectedFormatID: '9999999999',
                 onSelectChangeHandler(e) {
                     const country = intCodesID.find((element) => {
@@ -53,19 +53,19 @@
     focus:outline-none focus:bg-white">
         <select id="countries" class="{{ $classes1 }}" x-model="selectedDialCodeID" @change="onSelectChangeHandler">
             <template x-for="{dial_code} in intCodesID">
-                <option :value="dial_code" x-text="dial_code" :selected="dial_code == 'NIU'"></option>
+                <option :value="dial_code" x-text="dial_code" :selected="dial_code == 'NINU'"></option>
             </template>
         </select>
-        <input x-mask:dynamic="selectedFormatID" type="text" class="{{ $classes }}" name="{{ $names }}" :placeholder="selectedFormatID">
+        <input x-mask:dynamic="selectedFormatID" type="text" {!! $attributes->merge(['class' => $classes ]) !!} name="{{ $names }}" :placeholder="selectedFormatID">
     </div>
 </div>
 
 <script>
     window.intCodesID = [
         {
-            name: "NIU",
-            dial_code: "NIU",
-            code: "NIU",
+            name: "NINU",
+            dial_code: "NINU",
+            code: "NINU",
             format: '9999999999'
         },
         {

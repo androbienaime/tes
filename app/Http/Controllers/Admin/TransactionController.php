@@ -125,6 +125,8 @@ class TransactionController extends Controller
         DB::beginTransaction();
 
         try {
+            $transaction->tagspayment()->delete();
+
             $transaction->account->decrement("balance", $transaction->amount);
 
             $transaction->delete();

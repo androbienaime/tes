@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,6 +33,9 @@ class Transaction extends Model
     }
 
 
+    public function tagspayment(){
+        return $this->hasMany(TagsPayment::class);
+    }
     public static function genTransactionCode(){
         $code = [
             'code' => mt_rand(1000000000, 999999999999)

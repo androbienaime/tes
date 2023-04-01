@@ -17,6 +17,7 @@ class CustomerTable extends DataTableComponent
     public function configure(): void
     {
         $this->setPrimaryKey('id');
+        $this->setDefaultSort('customers.created_at', 'desc');
 
         $this->setPerPageAccepted([10, 25, 50, 100]);
 
@@ -42,7 +43,13 @@ class CustomerTable extends DataTableComponent
                 ->searchable(),
             Column::make(__("Gender"), "gender")
                 ->sortable(),
+            Column::make(__("phone"), "address.phone")
+                ->sortable()
+                ->searchable(),
             Column::make(__("Identity number"), "identity_number")
+                ->sortable()
+                ->searchable(),
+            Column::make(__("City"), "address.city")
                 ->sortable()
                 ->searchable(),
             ButtonGroupColumn::make("Action", 'id')

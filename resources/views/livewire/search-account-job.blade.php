@@ -15,6 +15,6 @@
     </div>
     <div class="mb-1 ">
         <x-label-admin  for="name" :value="__('Current balance')" />
-        <x-input-admin id="name" class="block mt-1 w-full bg-green-500 text-white" type="text" name="name" value="{{ $current_balance . ' HTG' }}" required disabled="true"/>
+        <x-input-admin id="name" class="block mt-1 w-full bg-blue-800 text-white" type="text" name="name" value="{{ $current_balance . ' HTG' }}" required disabled="true"/>
     </div>
 </div>

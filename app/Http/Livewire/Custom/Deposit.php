@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Custom;
 use App\Models\Account;
 use App\Models\Customer;
 use Livewire\Component;
+use Livewire\Livewire;
 
 class Deposit extends Component
 {
@@ -14,8 +15,16 @@ class Deposit extends Component
     public $current_balance=0;
     public $classes;
     public $amount;
+    public $tagspayment;
+    public $echelon;
+    public $duration;
+
+    public $account_state = true;
 
     public bool $accountExist = false;
+
+    protected $listeners = ['tagspayment' => 'postTag'];
+
 
     public function render()
     {
@@ -35,6 +44,12 @@ class Deposit extends Component
 
                 $this->account = $account;
                 $this->accountExist = true;
+                $this->account_state = $account->state;
+
+                $this->tagspayment = json_encode($account->tagspayment);
+                $this->echelon = json_encode($account->type_of_account->price);
+                $this->duration = json_encode($account->type_of_account->duration);
+
             }else{
                 $this->fullname = "";
                 $this->current_balance =0;
@@ -47,5 +62,9 @@ class Deposit extends Component
             $this->fullname = "";
             $this->accountExist = false;
         }
+    }
+
+    public function postTag($parameter){
+        dd($this->emit('tagspayment', 1233));
     }
 }

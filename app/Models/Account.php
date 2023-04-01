@@ -48,7 +48,7 @@ class Account extends Model
      */
     public static function genAccountsCode(TypeOfAccount $typeOfAccount){
         $code = [
-            'code' => mt_rand(10000, 99999)
+            'code' => mt_rand(100, 999)
         ];
 
         $rules = ['code' => 'unique:accounts'];

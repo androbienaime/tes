@@ -65,24 +65,54 @@ class BranchController extends Controller
         return back()->with("status", __("Branch save successfully"));
     }
 
-    public function edit(Request $request){
+    public function edit(Branch $branch){
         $country = Country::where('name', 'Haiti')->first();
         $states = $country->getStates;
 
-        $branches = Branch::all();
-        $branches = $branches->find($request->branch);
 
-
-        $address = $branches->Address()->first();
-
-
-        return view("adminTheme.Branch.branch",
+        return view("adminTheme.Branch.edit",
             [
                 'states' => $states,
-                'address' => $address,
-                'branches' => $branches
+                'branch' => $branch
             ]
         );
+    }
+
+    public function update(Request $request, Branch $branch){
+        $validated = $request->validate([
+            'name' => 'required|min:2|max:20',
+            'state' => 'required|min:3|max:20',
+            'city' => 'required|max:20',
+            'address1' => 'required|min:3|max:50',
+            'phone' => 'required|min:8'
+        ]);
+
+        $branch->name = $request->name;
+        $branch->address->update([
+            'state' => $request->state,
+            'city' => $request->city,
+            'address1' => $request->address1,
+            'phone' => $request->phone
+        ]);
+        $branch->update();
+
+        // $event = event(new RegisteredBranchEvent($branch));
+
+        return back()->with("status", __("Branch update successfully"));
+    }
+
+    public function destroy(Request $request, Branch $branch){
+        $status = "";
+        if($branch->employee()->count() === 0){
+            $branch->forceDelete();
+            $message = "Branch delete succesfully";
+            return redirect()->route("admin.branch.index");
+        }else{
+            $message = "Sorry, This branch is associated by employeee";
+            $status = "error";
+        }
+
+        return back()->with($status, __($message));
     }
     private function genBranchCode(){
         $this->code = [

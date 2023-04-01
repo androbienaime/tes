@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\Branch;
 use App\Models\Employee;
 use App\Models\User;
@@ -23,7 +24,8 @@ class EmployeesTableSeeder extends Seeder
             "identity_number" => "2090210210",
             "user_id" => User::all()->first()->id,
             "gender" => "Male",
-            "branch_id" => Branch::all()->first()->id
+            "branch_id" => Branch::all()->first()->id,
+            "address_id" => Address::all()->first()->id
         ]);
     }
 }

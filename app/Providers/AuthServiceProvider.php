@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Policies\CustomerPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -28,6 +29,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->registerPolicies();
 
         Gate::define("access-settings", function (User $user){
@@ -35,6 +37,10 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define("access-update-customer", function (User $user){
+            return $user->isSuperAdmin();
+        });
+
+        Gate::define("isAdmin", function (User $user){
             return $user->isSuperAdmin();
         });
 
