@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\TypeOfAccountController;
 
 Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], function()  {
     Route::resource('customer', 'App\Http\Controllers\Admin\CustomerController');
@@ -17,14 +18,17 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], func
     Route::resource('account', 'App\Http\Controllers\Admin\AccountController');
 
     Route::group(['middleware' => "can:access-settings"], function (){
-        Route::resource('typeofaccount', 'App\Http\Controllers\Admin\TypeOfAccountController');
         Route::resource('branch', 'App\Http\Controllers\Admin\BranchController');
         Route::resource('employee', 'App\Http\Controllers\Admin\EmployeeController');
         Route::resource('report', 'App\Http\Controllers\Admin\ReportController');
+        Route::resource('typeofaccount', 'App\Http\Controllers\Admin\TypeOfAccountController');
+
+        Route::get('typeofaccountdestroy/{id}', [TypeOfAccountController::class, 'destroy2'])->name("typeofaccountdestroy.destroy");
+        Route::get('typeofaccountedit/{id}', [TypeOfAccountController::class, 'edit'])->name("typeofaccountedit.edit");
 
         Route::resource('transaction', 'App\Http\Controllers\Admin\TransactionController')->only(['destroy', 'edit']);
 
-        Route::put('password', [EmployeeController::class, 'updatePassword'])->name('employee.updatePassword');
+        Route::put('passwordchange/{employee}', [EmployeeController::class, 'updatePassword'])->name('employee.updatePassword');
 
         Route::get('branch/report/history/{branch}', [ReportController::class, 'showBranchHistory'])->name("branch.show.history");
 
@@ -38,6 +42,7 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], func
 
         Route::get('/api/getmonthlyaverage', [ReportController::class, 'getmonthlyaverage']);
 
+        Route::get('showdashemployeehistory/{employee}', [ReportController::class, 'showDashEmployeeHistory'])->name("dashemployeeHistory");
     });
 
     Route::get('/api/getcustomers', [CustomerController::class, 'getcustomers']);

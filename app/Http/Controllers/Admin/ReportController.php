@@ -56,6 +56,29 @@ class ReportController extends Controller
         return json_encode($transactions, true);
     }
 
+    public function showDashEmployeeHistory(Employee $employee){
+        if(!$employee){
+            abort(404);
+        }
+
+        $this->join = ['employees', 'transactions.employee_id', '=', 'employees.id'];
+        $this->query = ["employee_id", $employee->id];
+        $this->__contruct();
+
+        $customer_count = Customer::all()
+            ->where("employee_id", '=', $employee->id)->count();
+
+        return [
+            "customer_count" => $customer_count,
+            "sumDepositByDay" => $this->sumDepositByDay(),
+            "sumDepositByMonth" => $this->sumDepositByMonth(),
+            "sumWithdrawByDay" => $this->sumWhithdrawByDay(),
+            "sumWithdrawByMonth" => $this->sumWhithdrawByMonth(),
+            "sumReal" => $this->sumReal(),
+        ];
+
+    }
+
     public function showEmployeeHistory(Employee $employee){
         if(!$employee){
             abort(404);
@@ -65,13 +88,16 @@ class ReportController extends Controller
         $this->query = ["employee_id", $employee->id];
         $this->__contruct();
 
-        $customer_count = Customer::all()->count();
+        $customer_count = Customer::all()
+            ->where("employee_id", '=', $employee->id)->count();
 
         return view("adminTheme.Team.Employee.show-history",[
             "customer_count" => $customer_count,
             "sumDepositByDay" => $this->sumDepositByDay(),
             "sumDepositByMonth" => $this->sumDepositByMonth(),
             "sumWithdrawByDay" => $this->sumWhithdrawByDay(),
+            "sumWithdrawByMonth" => $this->sumWhithdrawByMonth(),
+            "sumReal" => $this->sumReal(),
             "columnChartModel" => $this->columnChartModel,
             "pieChartModel" => $this->pieChartModel,
             "employee" => $employee
@@ -87,13 +113,18 @@ class ReportController extends Controller
         $this->query = ["employees.branch_id", $branch->id];
         $this->__contruct();
 
-        $customer_count = Customer::all()->count();
+        $customer_count = DB::table("customers")
+            ->select("employees.id")
+            ->join("employees", "employees.id", "=", "customers.employee_id")
+            ->where("employees.branch_id", '=', $branch->id)->get()->count();
 
         return view("adminTheme.Branch.show-history",[
             "customer_count" => $customer_count,
             "sumDepositByDay" => $this->sumDepositByDay(),
             "sumDepositByMonth" => $this->sumDepositByMonth(),
             "sumWithdrawByDay" => $this->sumWhithdrawByDay(),
+            "sumWithdrawByMonth" => $this->sumWhithdrawByMonth(),
+            "sumReal" => $this->sumReal(),
             "columnChartModel" => $this->columnChartModel,
             "pieChartModel" => $this->pieChartModel,
             "branch" => $branch
@@ -106,6 +137,7 @@ class ReportController extends Controller
             ->where("type_of_transaction_id", $this->deposit->id)
             ->join($this->join[0], $this->join[1], $this->join[2], $this->join[3])
             ->where($this->query[0], $this->query[1])
+            ->where("transactions.deleted_at", '=', Null)
             ->whereDate('transactions.created_at', $this->dateToday)
             ->sum("amount");
     }
@@ -115,22 +147,59 @@ class ReportController extends Controller
             ->where("type_of_transaction_id", $this->deposit->id)
             ->join($this->join[0], $this->join[1], $this->join[2], $this->join[3])
             ->where($this->query[0], $this->query[1])
+            ->where("transactions.deleted_at", '=', Null)
             ->whereMonth('transactions.created_at', '=', $this->currentMonth)
             ->sum("amount");
     }
 
+    /**
+     * @return int|mixed
+     */
     public function sumWhithdrawByDay(){
-        $withdraw = $deposit = DB::table("type_of_transactions")
-            ->where("name", "WITHDRAW")
-            ->orWhere("name", "PAYMENT")
+        $withdraw =  DB::table("type_of_transactions")
+            ->where("name", "WITHDRAWAL")
+            ->first();
+
+        $payment = DB::table("type_of_transactions")
+            ->where("name", "PAYMENT")
             ->first();
 
         return DB::table("transactions")
             ->where("type_of_transaction_id", $withdraw->id)
-            ->join($this->join[0], $this->join[1], $this->join[2], $this->join[3])
+            ->whereDate('transactions.created_at', '=', $this->dateToday)
             ->where($this->query[0], $this->query[1])
-            ->whereDate('transactions.created_at', $this->dateToday)
+            ->orWhere("type_of_transaction_id", $payment->id)
+            ->whereDate('transactions.created_at', '=', $this->dateToday)
+            ->where($this->query[0], $this->query[1])
+            ->join($this->join[0], $this->join[1], $this->join[2], $this->join[3])
+            ->where("transactions.deleted_at", '=', Null)
             ->sum("amount");
+
+    }
+
+    public function sumWhithdrawByMonth(){
+        $withdraw = DB::table("type_of_transactions")
+            ->where("name", "WITHDRAWAL")
+            ->first();
+
+        $payment= DB::table("type_of_transactions")
+            ->where("name", "PAYMENT")
+            ->first();
+
+        return DB::table("transactions")
+            ->where("type_of_transaction_id", $withdraw->id)
+            ->whereMonth('transactions.created_at', '=', $this->currentMonth)
+            ->where($this->query[0], $this->query[1])
+            ->orWhere("type_of_transaction_id", $payment->id)
+            ->whereMonth('transactions.created_at', '=', $this->currentMonth)
+            ->where($this->query[0], $this->query[1])
+            ->join($this->join[0], $this->join[1], $this->join[2], $this->join[3])
+            ->where("transactions.deleted_at", '=', Null)
+            ->sum("amount");
+    }
+
+    public function sumReal(){
+        return $this->sumDepositByDay() - $this->sumWhithdrawByDay();
     }
 
     protected function getStatColumnValue(){
@@ -147,7 +216,8 @@ class ReportController extends Controller
             return $transactions->sum('amount');
         });
 
-        $color = ["#0358ac", "#e6bd00"];
+        $color = ["#0358ac", "#e6bd00", "#e65700", "#c27ba0", "#93c47d", "#8e7cc3",
+            "#ffd966", "#FFCA3E", "#FF6F50", "#D03454", "#9C2162", "#772F67", "#0358ac"];
         $i=0;
         $columnChartModel = (new ColumnChartModel())
             ->setTitle('Total transaction')
@@ -167,7 +237,8 @@ class ReportController extends Controller
     }
 
     protected function getStatPieColumnValue(){
-        $color = ["#0358ac", "#e6bd00", "#e65700"];
+        $color = ["#0358ac", "#e6bd00", "#e65700", "#c27ba0", "#93c47d", "#8e7cc3",
+            "#ffd966", "#FFCA3E", "#FF6F50", "#D03454", "#9C2162", "#772F67", "#0358ac"];
         $account = Account::all()
             ->where("employee_id", $this->query[1]);
 

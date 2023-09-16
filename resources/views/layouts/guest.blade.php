@@ -1,3 +1,8 @@
+{{--@php--}}
+{{--    use Illuminate\Support\Facades\Artisan;--}}
+
+{{--    Artisan::call('optimize');--}}
+{{--@endphp--}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -7,10 +12,11 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="shortcut icon" type="image/jpg" href="{{ asset("img/logo.ico") }}"/>
+        <link rel="stylesheet" type="text/css" href="{{ asset("build/assets/app-1841aea6.css") }}"/>
 
+        <script type="text/javascript" src="{{ asset("build/assets/app-6f0e8e06.js") }}"></script>
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -20,7 +26,7 @@
                 <a href="/">
                     <img class="mx-auto" src="{{ asset("img/logo.png") }}" alt="LT FINANCE"/>
                 </a>
-                <span class="block py-2 text-xs text-gray-600 sm:text-center  text-center dark:text-gray-400">Version 1.0.0</span>
+                <span class="block py-2 text-xs text-gray-600 sm:text-center  text-center dark:text-gray-400">Version 1.0.1</span>
             </div>
 
             <div class="w-3/4 sm:max-w-md sm:px-6 lg:px-8 mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
@@ -28,7 +34,7 @@
             </div>
 
             <div class="py-6">
-                @include("AdminTheme.partials.footer")
+                @include("adminTheme.partials.footer")
             </div>
         </div>
 

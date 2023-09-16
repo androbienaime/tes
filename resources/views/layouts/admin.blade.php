@@ -14,6 +14,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script src="https://code.jquery.com/jquery-3.6.1.min.js" defer></script>
 
+
         @livewireStyles
         <style>
           [x-cloak] { display: none !important; }
@@ -44,8 +45,6 @@
               </div>
             </main>
           </div>
-
-
           @livewireScripts
           @livewireChartsScripts
     </body>

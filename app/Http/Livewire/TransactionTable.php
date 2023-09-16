@@ -31,6 +31,12 @@ class TransactionTable extends DataTableComponent
 
 
     }
+    public function builder(): Builder
+    {
+        return Transaction::query();
+//        ->groupBy("transactions.type_of_transaction_id");
+
+    }
 
     public function filters(): array
     {
@@ -73,7 +79,7 @@ class TransactionTable extends DataTableComponent
             Column::make("Account id", "account_id")
                 ->sortable()
                 ->hideIf(true),
-            Column::make("No Account", "account.code")
+            Column::make(__("No Account"), "account.code")
                 ->sortable(),
             Column::make(__("CUSTOMER NAME"), "account.customer.name")
                 ->sortable()
@@ -81,16 +87,16 @@ class TransactionTable extends DataTableComponent
             Column::make(__("CUSTOMER FIRSTNAME"), "account.customer.firstname")
                 ->sortable()
                 ->searchable(),
-            Column::make(__("ID TRANSACTION"), "code")
-                ->sortable(),
             Column::make(__("Amount / HTG"), "amount")
+                ->sortable(),
+            Column::make(__("ID TRANSACTION"), "code")
                 ->sortable(),
             Column::make(__("Employee"), "employee.firstname")
                 ->sortable()
                 ->hideIf(Gate::denies("access-settings")),
-            Column::make(__("Type of transaction"), "type_of_transaction.name")
-                ->sortable(),
-
+            Column::make(__("Type of transaction"), __("type_of_transaction.name"))
+                ->sortable()
+                ->searchable(),
             Column::make(__("Created at"), "created_at")
                 ->sortable(),
             Column::make(__("Updated at"), "updated_at")

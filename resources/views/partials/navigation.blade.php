@@ -5,7 +5,7 @@
             <div class="flex">
                 <div class="flex md:hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <!-- Mobile button -->
-                   <button type="button" @click="opens = !opens" @click.away="opens = false"
+                   <button type="button" @click="opens = !opens"
                        class="inline-flex items-center justify-center p-2 rounded-md text-blue-700 hover:bg-yellow-400 focus:outline-none" >
                         <i class="bi bi-box-arrow-in-right"></i>
                     </button>

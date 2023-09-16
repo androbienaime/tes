@@ -104,7 +104,7 @@
                 <x-select-admin id="role" type="text" name="role" required>
                     @foreach($roles as $role)
 
-                        <option {{ $role->id == $employee->user->roles->first()->id ? 'selected=' : ' ' }}" value="{{ $role->id }}">{{ $role->name}}</option>
+                        <option {{ $role->id == $employee->user->roles->first()->id ? 'selected=' : ' ' }}" value="{{ $role->id }}">{{ $role->id}}</option>
                     @endforeach
                 </x-select-admin>
                 <x-input-error :messages="$errors->get('state')" class="mt-2" />

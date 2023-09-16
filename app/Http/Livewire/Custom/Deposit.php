@@ -49,6 +49,7 @@ class Deposit extends Component
                 $this->tagspayment = json_encode($account->tagspayment);
                 $this->echelon = json_encode($account->type_of_account->price);
                 $this->duration = json_encode($account->type_of_account->duration);
+                $this->emit("codeFound");
 
             }else{
                 $this->fullname = "";

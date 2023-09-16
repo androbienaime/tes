@@ -7,7 +7,7 @@
         <div class="grid gap-6 mb-2 md:grid-cols-2 border p-2">
             <!-- Name -->
             <div class="">
-                <x-label-admin for="code" :value="__('Code Customer')" />
+                <x-label-admin :required="true" for="code">{{ __("Code Customer") }}</x-label-admin>
                 <x-input-admin id="code" wire:model="query" class="block mt-1 w-full" type="text" name="code" required/>
                 <x-input-error :messages="$error" class="mt-2 mx-auto" />
             </div>
@@ -15,7 +15,7 @@
             <!-- Name -->
 
             <div class="">
-                <x-label-admin  for="name" :value="__('Full Name')" />
+                <x-label-admin for="name" :value="__('Full Name')" />
                 <x-input-admin id="name" class="block mt-1 w-full {{ $classes }}" type="text" name="name" value="{{ $fullname }}"  required disabled="true"/>
                 @if(!$account_state)
                     <x-input-error :messages="' Ce compte a ete desactiver'" class="mt-2 mx-auto" />
@@ -24,11 +24,11 @@
         </div>
         <div class="mb-1 ">
             <x-label-admin  for="name" :value="__('Current balance')" />
-            <x-input-admin id="current_balance" class="block mt-1 w-full bg-blue-800 text-white" type="text" name="name" value="{{ $current_balance }} HTG" required disabled="true"/>
+            <x-input-admin style="background-color:blue" id="current_balance" class="block mt-1 w-full bg-blue-600 text-white" type="text" name="name" value="{{ $current_balance }} HTG" required disabled="true" :style="'background-color:#00416d;'"/>
         </div>
 
         <div class="mb-5">
-            <x-input-label for="amount" :value="__('Amount')" />
+            <x-label-admin required="true" for="amount" :value="__('Amount')" />
             <div class="flex">
                   <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                     HTG
@@ -67,7 +67,7 @@
                 </span>
                         </template>
 
-                        <input class="tags-input-text" placeholder="Add tag..."
+                        <input class="tags-input-text" placeholder="Ajouter des Casiers"
                                @keydown.enter.prevent="addTag(newTag)"
                                @keydown.space.prevent="addTag(newTag)"
 
@@ -82,7 +82,7 @@
             @endif
         @endif
 
-        <x-primary-button :class="'flex'">{{ __("Save") }}</x-primary-button>
+        <x-primary-button :class="'flex'" :id="'btn'" :style="'background-color:#00416d ;hover:yellow;'">{{ __("Save") }}</x-primary-button>
 
             @if($accountExist)
             @if($account->type_of_account->active_case_payments  == true)
@@ -99,7 +99,7 @@
 
             <div class="mx-auto px-4 overflow-x-auto">
                 <table  class="border-collapse border border-gray-400 w-full">
-                    @for($i = 1; $i <= 60; $i++)
+                    @for($i = 1; $i <= 30 * $account->type_of_account->duration; $i++)
                         @if(($i - 1) % 10 == 0)
                             <tr>
                         @endif
@@ -132,13 +132,11 @@
     @endif
     </div>
 
-
     <script type="text/javascript">
-        let tgs = ['']; let echelon =0, duration=0;
+        let tgs = ['']; let echelon =0, duration=0, resetTg = false;
 
-        // Recuperer a la vole les tags deja enregistrer dans la base de donnee
         document.addEventListener("DOMContentLoaded", () => {
-            Livewire.hook('message.processed', (el, component) => {
+            Livewire.on('codeFound', () => {
                 const ta = @this.tagspayment;
                 if(ta != null){
                     var obj = JSON.parse(ta);
@@ -146,9 +144,11 @@
                     for(var i=0; i < obj.length; i++){
                         tgs[i] = obj[i].tags.toString();
                     }
+
                 }
 
                 if(@this.echelon != null){
+                    resetTg = true;
                     echelon = JSON.parse(@this.echelon);
                     duration = JSON.parse(@this.duration);
                 }
@@ -397,6 +397,10 @@
         .py-16 {
             padding-top: 4rem;
             padding-bottom: 4rem;
+        }
+
+        #btn{
+            hover:#277ec3;
         }
     </style>
 

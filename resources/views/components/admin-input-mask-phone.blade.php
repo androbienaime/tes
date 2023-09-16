@@ -54,7 +54,7 @@
                 <option :value="dial_code" x-text="dial_code" :selected="dial_code == '+509'"></option>
             </template>
         </select>
-        <input x-mask:dynamic="selectedFormat" type="text" {!! $attributes->merge(['class' => $classes ]) !!} name="{{ $names }}" :placeholder="selectedFormat">
+        <input x-mask:dynamic="selectedFormat" type="text" {!! $attributes->merge(['class' => $classes ]) !!} name="{{ $names }}" autocomplete="off" :placeholder="selectedFormat">
     </div>
 </div>
 

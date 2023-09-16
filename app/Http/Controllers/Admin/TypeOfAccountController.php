@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\TypeOfAccount;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TypeOfAccountController extends Controller
 {
@@ -72,9 +73,16 @@ class TypeOfAccountController extends Controller
      * @param  \App\Models\TypeOfAccount  $typeOfAccount
      * @return \Illuminate\Http\Response
      */
-    public function edit(TypeOfAccount $typeOfAccount)
+    public function edit(Request $request)
     {
-        //
+        $typeofaccount = TypeOfAccount::find($request->id);
+        if($typeofaccount->count() <= 0){
+            abort(404);
+        }
+
+        return view("adminTheme.Account.TypeOfAccount.edit", [
+           'typeofaccount' => $typeofaccount
+        ]);
     }
 
     /**
@@ -86,7 +94,29 @@ class TypeOfAccountController extends Controller
      */
     public function update(Request $request, TypeOfAccount $typeOfAccount)
     {
-        //
+        $typeOfAccount = TypeOfAccount::find($request->typeofaccount);
+        if($typeOfAccount->count() <= 0){
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|min:3|max:20',
+            'price' => 'required|integer|min:1',
+            'duration' => 'required|integer|min:1',
+            'active_case_payment' => "required",
+            'prefix' => 'required|min:2|max:2'
+        ]);
+
+        $typeOfAccount->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'duration' => $request->duration,
+            'active_case_payment' => $request->active_case_payment,
+            'prefix' => $request->prefix
+        ]);
+
+
+        return back()->with("status", __("updated successfully"));
     }
 
     /**
@@ -97,6 +127,10 @@ class TypeOfAccountController extends Controller
      */
     public function destroy(TypeOfAccount $typeOfAccount)
     {
+        //
+    }
+
+    public function destroy2(Request $request){
         //
     }
 }

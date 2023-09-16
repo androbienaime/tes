@@ -33,6 +33,10 @@ class Transaction extends Model
     }
 
 
+    public function tags_payment(){
+        return $this->hasMany(TagsPayment::class);
+    }
+
     public function tagspayment(){
         return $this->hasMany(TagsPayment::class);
     }

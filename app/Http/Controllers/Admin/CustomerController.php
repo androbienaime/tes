@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Nette\Schema\ValidationException;
+use function Nette\Utils\first;
 
 class CustomerController extends Controller
 {
@@ -106,7 +107,7 @@ class CustomerController extends Controller
 
 
             $account = new Account();
-            $account->code = Account::genAccountsCode(TypeOfAccount::find($request->typeofaccount));
+            $account->code = Account::genAccountsCode(TypeOfAccount::all()->find($request->typeofaccount));
             $account->type_of_account_id = $request->typeofaccount;
             $account->customer_id = $customer->id;
             $account->balance = 0;
@@ -142,15 +143,20 @@ class CustomerController extends Controller
             return back();
         }
 
+
         return view("adminTheme.Customer.edit",[
             'customer' => $customer,
             "countries" => $this->countries,
             "states" => $this->states,
-            'typeofaccounts' => $this->typeofaccount
         ]);
    }
 
-   public function update(Request $request, Customer $customer){
+    /**
+     * @param Request $request
+     * @param Customer $customer
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, Customer $customer){
        $request->validate([
            'last_name' => 'required|min:3',
            'first_name' => 'required|min:3',
@@ -159,7 +165,9 @@ class CustomerController extends Controller
            'email' => 'nullable',
            'country' => 'required',
            'city' => 'required',
-           'phone' => 'required|min:4'
+           'phone' => 'required|min:4',
+           'reference_person' => 'nullable|min:4',
+           'phone_2' => 'nullable|min:4'
        ]);
 
        DB::beginTransaction();
@@ -174,14 +182,26 @@ class CustomerController extends Controller
                'state' => $request->state
            ]);
 
-
            $customer->update([
-                'name' => $request->last_name,
                'firstname' => $request->first_name,
+                'name' => $request->last_name,
                'gender' => $request->gender,
                'identity_number' => $request->identity_number
            ]);
 
+           if($request->reference_person != null){
+               $reference_person = new ReferencePerson();
+               $reference_person->full_name = $request->reference_person;
+               $reference_person->phone = $request->phone_2;
+               if($customer->Reference_people()->count() == 0){
+                   $customer->Reference_people()->save($reference_person);
+               }else {
+                   $customer->Reference_people()->update([
+                       "full_name" => $request->reference_person,
+                       "phone" => $request->phone_2
+                   ]);
+               }
+           }
        }catch (ValidationException $e){
            DB::rollBack();
            return back()->with("status", __("Error" + $e->getMessage()));
@@ -208,24 +228,27 @@ class CustomerController extends Controller
         return $validate ? $this->code['code'] : $this->genCustomerCode();
     }
 
+    /**
+     * @param Request $request
+     * @return false|string
+     * Permmettant de rechercher un client dans la base
+     */
     public function getcustomers(Request $request){
+        $customers = null;
         if(strlen($request->search) > 1 ) {
             $req = '%' . $request->search . '%';
             $c = DB::table("customers")
-                ->join("addresses", "customers.id", "=", "addresses.id")
+                ->join("addresses", "customers.address_id", "=", "addresses.id")
                 ->select("customers.*", "addresses.phone as phone")
-                ->where("customers.name", 'like', $req)
-                ->orWhere("customers.firstname", "like", $req)
+                ->where(DB::raw("CONCAT(customers.firstname, ' ', customers.name)"), 'like', $req)
+                ->orWhere(DB::raw("CONCAT(customers.name, ' ', customers.firstname)"), 'like', $req)
                 ->orWhere("customers.code", "like", $req)
                 ->get();
 
-            if (count($c) > 0) {
+            if ($c->count() > 0) {
                 $customers = $c;
 
-            } else {
-                $customers = [];
             }
-
             return json_encode($customers, true);
         }
 

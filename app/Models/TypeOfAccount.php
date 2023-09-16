@@ -14,5 +14,10 @@ class TypeOfAccount extends Model
         'active_case_payments',
         'prefix'
     ];
+
+    public static function find($typeofaccount)
+    {
+    }
+
     use HasFactory;
 }

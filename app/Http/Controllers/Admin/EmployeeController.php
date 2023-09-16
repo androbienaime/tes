@@ -191,6 +191,7 @@ class EmployeeController extends Controller
                 'email' => $request->email
             ]);
 
+            dd($request->role);
             $employee->user->roles()->sync($request->role);
 
             $employee->address()->update([
@@ -253,14 +254,14 @@ class EmployeeController extends Controller
 
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request, Employee $employee)
     {
         $validated = $request->validate([
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
 
-        $request->user()->update([
+        $employee->user()->update([
             'password' => Hash::make($validated['password']),
             'first_time_login' => 1
         ]);

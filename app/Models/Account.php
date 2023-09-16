@@ -47,14 +47,15 @@ class Account extends Model
      * @return mixed
      */
     public static function genAccountsCode(TypeOfAccount $typeOfAccount){
+
         $code = [
-            'code' => mt_rand(100, 999)
+            'code' => $typeOfAccount->prefix.'-'.mt_rand(550, 999)
         ];
 
         $rules = ['code' => 'unique:accounts'];
 
         $validate = Validator::make($code, $rules)->passes();
 
-        return $validate ? $typeOfAccount->prefix.'-'.$code['code'] : self::genAccountsCode();
+        return $validate ? $code['code'] : self::genAccountsCode($typeOfAccount);
     }
 }

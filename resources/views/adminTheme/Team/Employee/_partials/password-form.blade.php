@@ -8,8 +8,7 @@
             {{ __("Update your account's employee information and email address.") }}
         </p>
     </header>
-
-    <form method="post" action="{{ route('admin.employee.updatePassword') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('admin.employee.updatePassword', $employee) }}" class="mt-6 space-y-6">
         @csrf
         @method('put')
 

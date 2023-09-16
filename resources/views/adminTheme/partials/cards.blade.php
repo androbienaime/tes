@@ -12,6 +12,13 @@
 
             <x-admin-card :icon_class="'bi bi-cash-stack'"
                           :title="__('Withdrawal - Today')" :qty="$sumWithdrawByDay.' HTG'"/>
+
+            <x-admin-card :icon_class="'bi bi-cash-stack'"
+                          :title="__('Withdrawal/Month')" :qty="$sumWithdrawByMonth.' HTG'"/>
+
+
+            <x-admin-card :icon_class="'bi bi-cash-stack'"
+                          :title="__('Solde - Today')" :qty="$sumReal.' HTG'"/>
         </div>
     </div>
 </div>

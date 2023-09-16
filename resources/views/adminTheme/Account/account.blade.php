@@ -1,5 +1,4 @@
 <x-admin-layout>
-
     <x-slot name="header">
         <div class="flex flex-row">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -17,7 +16,17 @@
 
     <x-flashmessage :status="session('status')" />
     @if(\Illuminate\Support\Facades\Session::exists('status'))
-        <x-admin-modal > {{ @session("status") }}</x-admin-modal>
+        <x-modal name="confirm-account-deletion" :show="true" focusable>
+            <div class="p-5 text-green-500">
+                <h1 class="text-3xl">{{ @session("status") }}</h1>
+            </div>
+
+            <div class="mt-6 p-2 flex justify-end">
+                <x-secondary-button :style="'background-color:#00416d;color:white;'" x-on:click="$dispatch('close')">
+                    {{ __('Ok') }}
+                </x-secondary-button>
+            </div>
+        </x-modal>
     @endif
     <!-- Panel -->
     <x-primary-panel :cs="'bi bi-bank'" :title="__('Add an Account')">
@@ -27,7 +36,7 @@
 
                 <livewire:search-customer />
                 <x-center-form>
-                    <x-label-admin for="typeofaccount">{{ __("Type Of Account") }}</x-label-admin>
+                    <x-label-admin :required="true" for="typeofaccount">{{ __("Type Of Account") }}</x-label-admin>
                     <select id="typeofaccount" name="typeofaccount" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         @foreach($typeofaccounts as $typeofaccount)
                             <option value="{{ $typeofaccount->id}}">{{ $typeofaccount->name}}</option>

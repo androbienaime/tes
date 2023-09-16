@@ -15,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 class TransactionController extends Controller
 {
     const DEPOSIT = "DEPOSIT";
-    const WITHDRAW = "WITHDRAW";
+    const WITHDRAW = "WITHDRAWAL";
     const PAYEMENT = "PAYMENT";
 
     /**
@@ -71,7 +71,7 @@ class TransactionController extends Controller
         if(is_null($transaction->id)){
             abort(403);
         }
-        return view("adminTheme.transaction.beforedestroy", [
+        return view("adminTheme.Transaction.beforedestroy", [
             "transaction" => $transaction
         ]);
     }
@@ -115,7 +115,7 @@ class TransactionController extends Controller
             return redirect()->route('admin.withdraw.index');
         }elseif ($transaction_name == self::PAYEMENT){
             $this->DestroyPayment($transaction);
-            return redirect()->route('admin.payment.index');
+            return redirect()->route('admin.payment.index')->with("status", "Transaction Supprimer avec succes");;
         }
 
     }

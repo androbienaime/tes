@@ -36,7 +36,7 @@ class TypeOfAccountTable extends DataTableComponent
                 ->buttons([
                     LinkColumn::make('') // make() has no effect in this case but needs to be set anyway
                     ->title(fn($row) => '')
-                        ->location(fn($row) => route('admin.typeofaccount.edit', $row))
+                        ->location(fn($row) => route('admin.typeofaccountedit.edit', $row))
                         ->attributes(function($row) {
                             return [
                                 'class' => 'px-2 bi bi-pencil-square text-blue-600 hover:text-gray-800'

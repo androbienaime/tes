@@ -11,7 +11,7 @@ class ReferencePerson extends Model
 
     protected $guarded;
 
-    public function Customer(): \Illuminate\Database\Eloquent\Relations\HasMany{
+    public function Customer(){
         return $this->belongsTo(Customer::class);
     }
 }

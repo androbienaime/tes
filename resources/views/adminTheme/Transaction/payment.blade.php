@@ -18,7 +18,7 @@
 
     <!-- Panel -->
 
-    <x-primary-panel :cs="'bi bi-cash'" :title="__('To make a payment')">
+    <x-primary-panel :cs="'bi bi-cash'" :title="__('Make a payment')">
         <div class=" ">
             <form method="POST" action="{{ route("admin.payment.store") }}">
                 @csrf
@@ -26,7 +26,7 @@
                     <!-- Name -->
                     <livewire:search-account-job />
 
-                    <x-primary-button>{{ __("Save") }}</x-primary-button>
+                    <x-primary-button  :style="'background-color:#00416d;'">{{ __("Save") }}</x-primary-button>
                 </x-center-form>
             </form>
         </div>

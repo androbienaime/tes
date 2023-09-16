@@ -19,8 +19,8 @@
     <!-- Panel -->
 
     <x-primary-panel :cs="'bi bi-git'" :title="__('Add a Branch')">
-        <div class="flex mx-auto w-1/2 p-5 items-center">
-            <form method="POST" action="{{ route("admin.typeofaccount.index") }}">
+        <div class="flex mx-auto w-1/2 p-2 items-center">
+            <form method="POST" action="{{ route("admin.typeofaccount.update", $typeofaccount) }}">
             @csrf
             @method('patch')
             <!-- Name -->
@@ -34,35 +34,36 @@
 
                     <div>
                         <x-label-admin for="price">{{ __("Price / HTG") }}</x-label-admin>
-                        <x-input-admin type="number" name="price" placeholder="" required></x-input-admin>
+                        <x-input-admin type="number" name="price" :value="old('name', $typeofaccount->price)" required></x-input-admin>
                         <x-input-error :messages="$errors->get('price')" class="mt-2" />
                     </div>
 
                     <div>
                         <x-label-admin for="duration">{{ __("Duration / MONTH") }}</x-label-admin>
-                        <x-input-admin type="number" name="duration" placeholder="" required></x-input-admin>
+                        <x-input-admin type="number" name="duration" :value="old('name', $typeofaccount->duration)" required></x-input-admin>
                         <x-input-error :messages="$errors->get('duration')" class="mt-2" />
                     </div>
-
                     <div>
                         <x-label-admin :required="true"  for="active_case_payment">{{ __("TAGS") }}</x-label-admin>
                         <x-select-admin type="text" name="active_case_payment" required>
-                            <option value="0">{{ __("NO") }}</option>
-                            <option value="1">{{ __("YES") }}</option>
+                            <option @if($typeofaccount->active_case_payments == 0) selected @endif value="0">{{ __("NO") }}</option>
+                            <option @if($typeofaccount->active_case_payments == 1) selected @endif value="1">{{ __("YES") }}</option>
                         </x-select-admin>
                         <x-input-error :messages="$errors->get('active_case_payment')" class="mt-2" />
                     </div>
 
                     <div>
                         <x-label-admin for="prefix">{{ __("PREFIX") }}</x-label-admin>
-                        <x-input-admin type="text" name="prefix" placeholder="XA" required></x-input-admin>
+                        <x-input-admin type="text" name="prefix" :value="old('name', $typeofaccount->prefix)" placeholder="XA" required></x-input-admin>
                         <x-input-error :messages="$errors->get('prefix')" class="mt-2" />
                     </div>
                 </div>
 
 
-                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ __("Save") }}</button>
+                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ __("Update") }}</button>
             </form>
+
+
         </div>
     </x-primary-panel>
     <div class="">

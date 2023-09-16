@@ -42,12 +42,13 @@ class DashboardController extends Controller
 
         $customer_count = Customer::all()->count();
 
-
         return view("adminTheme.dashboard",[
             "customer_count" => $customer_count,
             "sumDepositByDay" => $this->sumDepositByDay(),
             "sumDepositByMonth" => $this->sumDepositByMonth(),
             "sumWithdrawByDay" => $this->sumWhithdrawByDay(),
+            "sumWithdrawByMonth" => $this->sumWhithdrawByMonth(),
+            "sumReal" => $this->sumReal(),
             "columnChartModel" => $this->columnChartModel,
             "pieChartModel" => $this->pieChartModel
         ]);
@@ -57,26 +58,56 @@ class DashboardController extends Controller
         return DB::table("transactions")
             ->where("type_of_transaction_id", $this->deposit->id)
             ->whereDate('created_at', '=', $this->dateToday)
+            ->where("deleted_at", '=', Null)
             ->sum("amount");
     }
 
     public function sumDepositByMonth(){
         return DB::table("transactions")
             ->where("type_of_transaction_id", $this->deposit->id)
+            ->where("deleted_at", '=', Null)
             ->whereMonth('created_at', '=', $this->currentMonth)
             ->sum("amount");
     }
 
     public function sumWhithdrawByDay(){
-        $withdraw = $deposit = DB::table("type_of_transactions")
-            ->where("name", "WITHDRAW")
-            ->orWhere("name", "PAYMENT")
+        $withdraw = DB::table("type_of_transactions")
+            ->where("name", "WITHDRAWAL")
+            ->first();
+
+        $payment= DB::table("type_of_transactions")
+            ->where("name", "PAYMENT")
             ->first();
 
         return DB::table("transactions")
             ->where("type_of_transaction_id", $withdraw->id)
-            ->whereDate('created_at', $this->dateToday)
+            ->whereDate('created_at', '=', $this->dateToday)
+            ->orWhere("type_of_transaction_id", $payment->id)
+            ->whereDate('created_at', '=', $this->dateToday)
             ->sum("amount");
+
+    }
+
+    public function sumWhithdrawByMonth(){
+        $withdraw = DB::table("type_of_transactions")
+            ->where("name", "WITHDRAWAL")
+            ->first();
+
+        $payment= DB::table("type_of_transactions")
+            ->where("name", "PAYMENT")
+            ->first();
+
+
+        return DB::table("transactions")
+            ->where("type_of_transaction_id", $withdraw->id)
+            ->whereMonth('created_at', '=', $this->currentMonth)
+            ->orWhere("type_of_transaction_id", $payment->id)
+            ->whereMonth('created_at', '=', $this->currentMonth)
+            ->sum("amount");
+    }
+
+    public function sumReal(){
+        return $this->sumDepositByDay() - $this->sumWhithdrawByDay();
     }
 
     protected function getStatColumnValue(){

@@ -27,8 +27,8 @@
             <div>
                 <x-label-admin :required="true"  for="gender">{{ __("Gender") }}</x-label-admin>
                 <x-select-admin type="text" name="gender" required>
-                    <option {{ $customer->sexe == 'Male' ? 'selected' : '' }} value="Male">Masculin</option>
-                    <option {{ $customer->sexe == 'Female' ? 'selected' : '' }}  value="Female">Feminin</option>
+                    <option {{ $customer->gender == 'Male' ? 'selected' : '' }} value="Male">Masculin</option>
+                    <option {{ $customer->gender == 'Female' ? 'selected' : '' }}  value="Female">Feminin</option>
                 </x-select-admin>
                 <x-input-error :messages="$errors->get('gender')" class="mt-2" />
             </div>
@@ -81,16 +81,16 @@
 
             <div>
                 <x-label-admin for="references_person">{{ __("Reference person") }}</x-label-admin>
-                <x-input-admin type="text" name="reference_person" placeholder=" " :value="old('reference_person')"  ></x-input-admin>
+                <x-input-admin type="text" name="reference_person" placeholder=" " :value="old('reference_person', @isset($customer->Reference_people->first()->full_name) ? $customer->Reference_people->first()->full_name : '')"  ></x-input-admin>
                 <x-input-error :messages="$errors->get('references_person')" class="mt-2" />
             </div>
 
             <div>
                 <x-label-admin for="phone_2">{{ __("Telephone number") }}</x-label-admin>
-                <x-admin-input-mask-phone :names="'phone_2'" :value="old('phone_2')"/>
+                <x-admin-input-mask-phone :names="'phone_2'" :value="old('phone_2', @isset($customer->Reference_people->first()->phone) ? $customer->Reference_people->first()->phone : '')"/>
                 <x-input-error :messages="$errors->get('phone2')" class="mt-2" />
             </div>
         </div>
-        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ __("Save") }}</button>
+        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{ __("Update") }}</button>
     </form>
 </section>

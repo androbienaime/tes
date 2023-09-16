@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             <div class="flex">
 
-                {{ __('Register Customer') }}
+                {{ __('Register a Customer') }}
 
                 <!-- Right position -->
                 <div class="absolute origin-top-right right-5">
@@ -15,7 +15,17 @@
 
     <x-flashmessage :status="session('status')" />
     @if(\Illuminate\Support\Facades\Session::exists('status'))
-        <x-admin-modal > {{ @session("status") }}</x-admin-modal>
+        <x-modal name="confirm-account-deletion" :show="true" focusable>
+            <div class="p-5 text-green-500">
+                <h1 class="text-3xl">{{ @session("status") }}</h1>
+            </div>
+
+            <div class="mt-6 p-2 flex justify-end">
+                <x-secondary-button :style="'background-color:#00416d;color:white;'" x-on:click="$dispatch('close')">
+                    {{ __('Ok') }}
+                </x-secondary-button>
+            </div>
+        </x-modal>
     @endif
     <!-- Panel (Add Customer) -->
     <x-primary-panel :cs="'bi bi-people-fill'" :title="__('Add a Customer')">
@@ -118,7 +128,7 @@
     </x-primary-panel>
     <div class="">
         <div class="max-w-7xl sm:px-6 ">
-            <div class="bg-white overflow-hidden shadow-sm ">
+            <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg ">
                 <div class="p-6 text-gray-900">
                     <livewire:customer-table />
                 </div>

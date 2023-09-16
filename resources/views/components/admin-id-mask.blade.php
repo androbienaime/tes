@@ -56,7 +56,7 @@
                 <option :value="dial_code" x-text="dial_code" :selected="dial_code == 'NINU'"></option>
             </template>
         </select>
-        <input x-mask:dynamic="selectedFormatID" type="text" {!! $attributes->merge(['class' => $classes ]) !!} name="{{ $names }}" :placeholder="selectedFormatID">
+        <input x-mask:dynamic="selectedFormatID" type="text" {!! $attributes->merge(['class' => $classes ]) !!} name="{{ $names }}" autocomplete="off" :placeholder="selectedFormatID">
     </div>
 </div>
 

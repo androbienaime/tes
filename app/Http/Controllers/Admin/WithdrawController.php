@@ -31,9 +31,14 @@ class WithdrawController extends Controller
 
 
 
-        if($request->amount >= $account->first()->balance){
+        if($request->amount > $account->first()->balance){
             $i++;
             $message = "The amount must be less than the amount in their account";
+        }
+
+        if($account->first()->balance <= 0 || $request->amount <= 0){
+            $i++;
+            $message = "The amount must be less than 0";
         }
 
         if(!$account->first()->state){
@@ -61,7 +66,7 @@ class WithdrawController extends Controller
                 'code' => Transaction::genTransactionCode(),
                 'account_id' => Account::where("code", $request->code)->first()->id,
                 'employee_id' => Employee::where('user_id', Auth::user()->getAuthIdentifier())->first()->id,
-                'type_of_transaction_id' => TypeOfTransaction::where("name", "Withdraw")->first()->id
+                'type_of_transaction_id' => TypeOfTransaction::where("name", "WITHDRAWAL")->first()->id
             ]);
 
 

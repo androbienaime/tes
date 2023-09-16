@@ -59,15 +59,21 @@ class DepositController extends Controller
                     'type_of_transaction_id' => TypeOfTransaction::where("name", "DEPOSIT")->first()->id,
                 ]);
 
+                // si l'utilisateur a un livret qui fonnctionne par case
                 if($account->first()->type_of_account->active_case_payments) {
                     $tags = array();
+                    $tagsPut = [];
                     $somme = 0;
                     $i=0;
+                    if($somme == 0){
+                        $i++;
+                    }
                     foreach ($request->numberTag as $nbt){
                         $arr = ["tags" => $nbt,
                             "transaction_id" => $transaction->id];
 
                             array_push($tags, $arr);
+                            array_push($tagsPut, intval($nbt));
 
                             $somme += $nbt * $account->first()->type_of_account->price;
                         $i++;
@@ -76,6 +82,15 @@ class DepositController extends Controller
                     if($request->amount < $somme){
                         return back()->with("errors2",
                             __("Erreur montant : " . $request->amount . " Gourdes est inferieur a la somme des differents tags : " . implode(', ', $request->numberTag)));
+                    }
+                    $tagsPay = $account->first()->tagspayment->pluck('tags')->toArray();
+
+
+                    // Verifier si l'utilisateur n'a pas deja enregistrer ces tags
+                    $intersection = array_intersect($tagsPay, $tagsPut);
+                    if(!empty($intersection)){
+                        return back()->with("errors2",
+                            __("Votre depot etait deja enregistrer"));
                     }
 
                     $account->first()->tagspayment()->createMany($tags);

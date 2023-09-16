@@ -7,9 +7,9 @@
         >{{ __('Delete Account') }}</x-danger-button>
 
         <x-modal name="confirm-account-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-            <form method="post" action="{{ route('admin.payment.store') }}" class="p-6">
+            <form method="post" action="{{ route('admin.account.destroy', $account) }}" class="p-6">
                 @csrf
-
+                @method('delete')
                 <input type="hidden" name="code" value="{{ $account->code }}" />
                 <h2 class="text-lg font-medium text-gray-900">
                     {{ __('Are you sure you want to delete this account ?') }}

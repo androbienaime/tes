@@ -26,23 +26,26 @@ class AccountTable extends DataTableComponent
         return [
             Column::make("Id", "id")
                 ->sortable(),
-            Column::make("Code", "code")
+            Column::make(__("No Account"), "code")
                 ->sortable()
                 ->searchable(),
-            Column::make("Type of account", "type_of_account.name")
+            Column::make(__("Type of account"), "type_of_account.name")
                 ->sortable()
                 ->searchable(),
-            Column::make("Name", "Customer.name")
+            Column::make(__("Name"), "Customer.name")
                 ->sortable()
                 ->searchable(),
-            Column::make("Firstname", "Customer.firstname")
+            Column::make(__("Firstname"), "Customer.firstname")
                 ->searchable()
                 ->sortable(),
-            Column::make("Balance", "balance")
+            Column::make(__("Balance / HTG"), "balance")
                 ->sortable(),
-            BooleanColumn::make('Active', "state")
+            Column::make(__("Phone"), "Customer.address.phone")
+                ->searchable()
+                ->sortable(),
+            BooleanColumn::make(__('Active'), "state")
                 ->view("adminTheme.Account.livewire.btn.state-view"),
-            Column::make("Employee", "Customer.Employee.firstname")
+            Column::make(__("Employee"), "Customer.Employee.firstname")
                 ->sortable()
                 ->hideIf(Gate::denies("isAdmin"))
                 ->searchable(),

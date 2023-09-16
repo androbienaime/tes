@@ -10,7 +10,7 @@ class Customer extends Model
     protected $fillable =[
         'code',
         'name',
-        'first_name',
+        'firstname',
         'gender',
         'identity_number',
         'employee_id',
@@ -23,10 +23,10 @@ class Customer extends Model
     }
 
     public function Account(){
-        return $this->belongsTo(Account::class);
+        return $this->hasMany(Account::class);
     }
 
-    public function Referenceperson(){
+    public function Reference_people(): \Illuminate\Database\Eloquent\Relations\HasMany{
         return $this->hasMany(ReferencePerson::class);
     }
 

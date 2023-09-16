@@ -42,6 +42,7 @@ class AccountController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * Creation de compte
      */
     public function store(Request $request)
     {
@@ -51,8 +52,9 @@ class AccountController extends Controller
         ]);
 
 
+
         $account = new Account();
-        $account->code = Account::genAccountsCode(TypeOfAccount::find($request->typeofaccount));
+        $account->code = Account::genAccountsCode(TypeOfAccount::all()->find($request->typeofaccount));
         $account->type_of_account_id = $request->typeofaccount;
         $account->customer_id = $request->id;
         $account->balance = 0;
@@ -103,12 +105,17 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
+        if(TypeOfAccount::find($request->typeofaccount) == null){
+            $message = "Ce type de compte n'existe pas";
+            return back()->with("error", __($message));
+        }
         if($account->transactions->count() > 0){
             $message = "Sorry you cannot edit this account. Please contact an administrator";
             return back()->with("error", __($message));
         }else{
 
             $account->update([
+                'code' => Account::genAccountsCode(TypeOfAccount::find($request->typeofaccount)),
                'type_of_account_id' => $request->typeofaccount
             ]);
 
@@ -116,7 +123,7 @@ class AccountController extends Controller
             $status = "status";
         }
 
-        return back()->with($status, __($message));
+        return back()->with("status", __($message) . " : ". $account->code);
     }
 
     /**
@@ -127,9 +134,26 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+
+        if($account->transactions->count() > 0){
+            $message = "Sorry you cannot delete this account. Please contact an administrator";
+            return back()->with("error", __($message));
+        }else{
+
+            $account->forceDelete();
+
+            $message = "The account has been deleted";
+            $status = "status";
+        }
+
+
+        return redirect()->route("admin.account.index")->with($status, __($message));
     }
 
+    /**
+     * @param Account $account
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     */
     public function showAccountHistory(Account $account){
         $result = DB::table("accounts")
             ->join("transactions", "accounts.id", "=", "transactions.account_id")
@@ -137,7 +161,7 @@ class AccountController extends Controller
             ->where("accounts.id", $account->id)->get();
 
 
-        return view("AdminTheme.Account.history", [
+        return view("adminTheme.Account.history", [
             "account" => $account
         ]);
     }

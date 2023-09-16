@@ -15,7 +15,19 @@
 
     <x-flashmessage :status="session('status')" />
     <x-flashmessage :status="session('error')" :warning="true" />
+    @if(\Illuminate\Support\Facades\Session::exists('status'))
+        <x-modal name="confirm-account-deletion" :show="true" focusable>
+            <div class="p-5 text-green-500">
+                <h1 class="text-3xl">{{ @session("status") }}</h1>
+            </div>
 
+            <div class="mt-6 p-2 flex justify-end">
+                <x-secondary-button :style="'background-color:#00416d;color:white;'" x-on:click="$dispatch('close')">
+                    {{ __('Ok') }}
+                </x-secondary-button>
+            </div>
+        </x-modal>
+@endif
 <!-- Panel -->
     <x-primary-panel :cs="'bi bi-bank'" :title="__('Update an Account')">
         <div class="">

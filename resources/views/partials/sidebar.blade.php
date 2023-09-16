@@ -1,13 +1,12 @@
 <!-- Sidebar -->
-<aside :class="{ '-translate-x-full': !opens }" class="md:fixed lg:fixed right-0 z-10 bg-gray-900 text-blue-100 w-64 px-2 py-4 absolute inset-y-0 left-0 md:relative transform
+<aside :class="{ '-translate-x-full': opens }" class="md:fixed lg:fixed right-0 z-10 bg-gray-900 text-blue-100 w-64 px-2 py-4 absolute inset-y-0 left-0 md:relative transform
              md:translate-x-0 overflow-y-auto
               transition ease-in-out duration-200 shadow-lg">
     <!-- Logo -->
     <div class="flex align-items-center justify-between px-2">
         <div class="block flex items-center space-x-2">
             <a class="text-white" href="{{ route('dashboard') }}">
-                <img  src="{{ asset("img/logo.png") }}" class="w-9 object-center	 " alt="LT FINANCE"/>
-
+                <img  src="{{ asset("img/logo.png") }}" class="w-9 object-center" alt="LT FINANCE"/>
             </a>
             <span class="text-2xl font-extrabold">LT FINANCE</span>
         </div>
@@ -54,7 +53,7 @@
             </x-admin-nav-sub-link>
 
             <x-admin-nav-sub-link :href="route('admin.payment.index')" :active="request()->routeIs('admin.payment.index')" >
-                <i class="bi bi-3-circle-fill"></i>
+                <i class="bi bi-4-circle-fill"></i>
                 {{ __("Make a payment") }}
             </x-admin-nav-sub-link>
 

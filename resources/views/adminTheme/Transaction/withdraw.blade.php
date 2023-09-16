@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex flex-row">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Deposit') }}
+                {{ __('Withdrawal') }}
             </h2>
 
             <!-- Right position -->
@@ -18,7 +18,7 @@
 
     <!-- Panel -->
 
-    <x-primary-panel :cs="'bi bi-cash'" :title="__('To make a deposit')">
+    <x-primary-panel :cs="'bi bi-cash'" :title="__('Make a withdrawal')">
         <div class=" ">
             <form method="POST" action="{{ route("admin.withdraw.store") }}">
                 @csrf
@@ -27,7 +27,7 @@
                     <livewire:search-account-job />
 
                     <div class="mb-5">
-                        <x-input-label for="amount" :value="__('Amount')" />
+                        <x-label-admin :required="true" for="amount" :value="__('Amount')" />
                         <div class="flex">
                           <span class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border border-r-0 border-gray-300 rounded-l-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
                             HTG
@@ -37,7 +37,7 @@
                         <x-input-error :messages="$errors->get('amount')" class="mt-2" />
                     </div>
 
-                    <x-primary-button>{{ __("Save") }}</x-primary-button>
+                    <x-primary-button :style="'background-color:#00416d;'">{{ __("Save") }}</x-primary-button>
                 </x-center-form>
             </form>
         </div>
