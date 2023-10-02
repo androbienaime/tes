@@ -17,13 +17,28 @@
     </div>
     <div class="">
         <div class="max-w-7xl sm:px-6  ">
+            @if($account)
+                @if(!$account->type_of_account->active_case_payments)
+                    <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg">
+                        <div class="p-6 text-gray-900">
+                            <div class=" w-full p-5">
+                                <livewire:history-accordion :account="$account" />
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endif
+
             <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg">
                 <div class="p-6 text-gray-900">
-                    <div class=" w-full p-5">
-                        <livewire:history-accordion :account="$account" >
+                    <div class=" w-full">
+                        <div class="flex px-4 uppercase">
+                            <span class="text-xl">NOM : {{ $account->customer->firstname }}</span>
+                            <span class="text-xl px-4">NOM : {{ $account->customer->firstname }}</span>
+                        </div>
+                        @include("adminTheme.Account.partials.show-account-case", ['account' => $account, 'show_details' => true])
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </x-admin-layout>

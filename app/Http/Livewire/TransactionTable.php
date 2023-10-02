@@ -23,6 +23,7 @@ class TransactionTable extends DataTableComponent
         $this->setDefaultSort('CREATED_AT', 'desc');
         $this->setFooterEnabled();
 
+
         if(!Gate::denies("access-settings")) {
             $this->setBulkActions([
                 'exportSelected' => 'Export',
@@ -33,7 +34,8 @@ class TransactionTable extends DataTableComponent
     }
     public function builder(): Builder
     {
-        return Transaction::query();
+        return Transaction::with("tags_payment");
+     //   return Transaction::query();
 //        ->groupBy("transactions.type_of_transaction_id");
 
     }
@@ -81,6 +83,13 @@ class TransactionTable extends DataTableComponent
                 ->hideIf(true),
             Column::make(__("No Account"), "account.code")
                 ->sortable(),
+            Column::make(__("Full Name"))
+                ->sortable()
+                ->searchable()
+                ->label(function ($row){
+                    return $row['account.customer.name']. " " .$row['account.customer.firstname'];
+                })
+                ,
             Column::make(__("CUSTOMER NAME"), "account.customer.name")
                 ->sortable()
                 ->searchable(),
@@ -89,6 +98,12 @@ class TransactionTable extends DataTableComponent
                 ->searchable(),
             Column::make(__("Amount / HTG"), "amount")
                 ->sortable(),
+            Column::make(__("Tags"))
+                ->label(function ($row){
+                    return $row['tags_payment']->pluck("tags")->map(function ($tags_payments){
+                        return '<span class=" badge badge-primary whitespace-normal">'.$tags_payments.'</span>';
+                    })->implode(",");
+                })->html(),
             Column::make(__("ID TRANSACTION"), "code")
                 ->sortable(),
             Column::make(__("Employee"), "employee.firstname")
@@ -110,4 +125,23 @@ class TransactionTable extends DataTableComponent
             ])
         ];
     }
+
+   public function ajouterTiret($liste) {
+        $resultat = [];
+        $n = count($liste);
+
+        for ($i = 0; $i < $n; $i++) {
+            $resultat[] = $liste[$i];
+            if ($i < $n - 1 && $liste[$i] + 1 !== $liste[$i + 1]) {
+                // Vérifie si le nombre suivant n'est pas consécutif
+                if ($i >= 2 && $liste[$i] - 1 === $liste[$i - 1]) {
+                    // Ajoute le tiret seulement si le précédent était consécutif
+                    $resultat[count($resultat) - 2] .= '-' . $liste[$i];
+                }
+            }
+        }
+
+        return implode(',', $resultat);
+    }
+
 }

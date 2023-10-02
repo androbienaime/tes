@@ -20,4 +20,6 @@ class TagsPayment extends Model
     public function transaction(){
         return $this->hasMany(Transaction::class);
     }
+
+
 }

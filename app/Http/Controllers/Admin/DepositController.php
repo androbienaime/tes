@@ -7,6 +7,7 @@ use App\Models\Account;
 use App\Models\Employee;
 use App\Models\Transaction;
 use App\Models\TypeOfTransaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,9 @@ class DepositController extends Controller
      */
     public function store(Request $request){
 
+        // Recuperation de l'employee
+        $employee_id = Employee::where('user_id', Auth::user()->getAuthIdentifier())->first()->id;
+
         $request->validate([
           'code' => 'required|exists:accounts',
             'amount' => 'required|decimal:0,10|min:1',
@@ -33,12 +37,27 @@ class DepositController extends Controller
 
         $numberTag = null;
 
+        // Verifie quel type de compte pour appliquer les differentes regles.
         $account = Account::where("code", $request->code);
         if($account->first()->type_of_account->active_case_payments){
             $request->validate([
                 'numberTag' => "required"
             ]);
+        }else{
+            // Empecher une meme employee d'enregistrer une transaction deux fois avec le meme montant durant un intervalle
+            $currentTime = Carbon::now();
+            $tenMinutesAgo = $currentTime->subMinutes(10);
 
+            $count = DB::table('transactions')
+                ->where('account_id', $account->first()->id)
+                ->where('amount', $request->amount)
+                ->where('employee_id', $employee_id)
+                ->where('created_at', '>=', $tenMinutesAgo)
+                ->count();
+
+            if($count > 0) {
+                return back()->with("errors2", __("Une entrée similaire existe déjà dans les 10 dernières minutes."));
+            }
         }
 
         DB::beginTransaction();
@@ -55,7 +74,7 @@ class DepositController extends Controller
                     'amount' => $request->amount,
                     'code' => Transaction::genTransactionCode(),
                     'account_id' => Account::where("code", $request->code)->first()->id,
-                    'employee_id' => Employee::where('user_id', Auth::user()->getAuthIdentifier())->first()->id,
+                    'employee_id' => $employee_id,
                     'type_of_transaction_id' => TypeOfTransaction::where("name", "DEPOSIT")->first()->id,
                 ]);
 
@@ -89,8 +108,7 @@ class DepositController extends Controller
                     // Verifier si l'utilisateur n'a pas deja enregistrer ces tags
                     $intersection = array_intersect($tagsPay, $tagsPut);
                     if(!empty($intersection)){
-                        return back()->with("errors2",
-                            __("Votre depot etait deja enregistrer"));
+                        return back()->with("errors2", __("Votre depot etait deja enregistrer"));
                     }
 
                     $account->first()->tagspayment()->createMany($tags);

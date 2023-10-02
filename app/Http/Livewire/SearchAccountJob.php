@@ -15,6 +15,8 @@ class SearchAccountJob extends Component
     public $classes = '';
     public $error = " ";
     public $current_balance = 0;
+    public $references_person = " ";
+    public $classes_r = '';
 
     public function updatedQuery(){
         if(strlen($this->query) > 2) {
@@ -25,6 +27,16 @@ class SearchAccountJob extends Component
                 $this->current_balance = $account->balance;
                 $this->classes = "text-green-600 border-green-400";
                 $this->error = " ";
+
+                $ref = $account->customer->Reference_people;
+                if($ref->count() > 0){
+                    $this->references_person = $ref[0]->full_name;
+                    $this->classes_r = "text-green-600 border-green-400";
+                }else {
+                    $this->references_person = "Aucune personne";
+                    $this->classes_r = "border-red-400 text-red-100";
+                }
+
             }else{
                 $this->customer = "";
                 $this->classes = "border-red-400";

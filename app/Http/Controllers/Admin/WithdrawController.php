@@ -23,7 +23,6 @@ class WithdrawController extends Controller
             'amount' => 'required|decimal:0,10|min:1',
         ]);
 
-
         $i=0;
         $message="";
 
