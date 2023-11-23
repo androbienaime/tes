@@ -94,7 +94,9 @@
 
     </x-center-form>
 
-        @include("livewire.custom.partiarls.cases")
+    <div class="sm:w-full md:w-full max-w-7xl mx-auto">
+         @include("livewire.custom.partiarls.cases")
+    </div>
 
     <script type="text/javascript">
         let tgs = ['']; let echelon =0, duration=0, resetTg = false;

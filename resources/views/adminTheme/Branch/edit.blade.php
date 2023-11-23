@@ -36,7 +36,7 @@
                         <x-select-admin id="state2" type="text" name="state" required>
                             <option value="">{{ __("Select State") }}</option>
                             @foreach($states as $state)
-                                <option @if($state->id == $branch->address->state) selected @endif value="{{ $state->id}}">{{ $state->name}}</option>
+                                <option {{ $state->id == $branch->address->state ? 'selected' : ''}} value="{{ $state->id}}">{{ $state->name}}</option>
                             @endforeach
                         </x-select-admin>
                         <x-input-error :messages="$errors->get('state')" class="mt-2" />

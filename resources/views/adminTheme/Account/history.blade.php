@@ -16,29 +16,30 @@
 
     </div>
     <div class="">
-        <div class="max-w-7xl sm:px-6  ">
-            @if($account)
-                @if(!$account->type_of_account->active_case_payments)
-                    <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg">
-                        <div class="p-6 text-gray-900">
-                            <div class=" w-full p-5">
-                                <livewire:history-accordion :account="$account" />
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            @endif
+        <div class="max-w-7xl sm:px-6">
+            <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg p-4">
+                @if($account)
+                        <x-html-print>
+                            <div class="p-6 text-gray-900">
+                                <div class=" w-full">
+                                    <div class="p-2 text-center">
+                                        <p> <span class="text-2xl text-blue-600 uppercase">{{ __("Account no : ". $account->code) }} </span></p>
 
-            <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg">
-                <div class="p-6 text-gray-900">
-                    <div class=" w-full">
-                        <div class="flex px-4 uppercase">
-                            <span class="text-xl">NOM : {{ $account->customer->firstname }}</span>
-                            <span class="text-xl px-4">NOM : {{ $account->customer->firstname }}</span>
-                        </div>
-                        @include("adminTheme.Account.partials.show-account-case", ['account' => $account, 'show_details' => true])
-                    </div>
-                </div>
+                                        <p><span class="text-1xl text-blue-600 uppercase">{{ $account->customer->firstname . " " .
+                                    $account->customer->name }}</span></p>
+                                        <hr class="mb-2 h-5"/>
+                                    </div>
+                                    @if(!$account->type_of_account->active_case_payments)
+                                        <livewire:history-accordion :account="$account" />
+                                    @else
+                                        @include("adminTheme.Account.partials.show-account-case", ['account' => $account, 'transaction'=>$transactions, 'show_details' => true])
+                                    @endif
+                                </div>
+                            </div>
+                        </x-html-print>
+                    @endif
+            </div>
         </div>
     </div>
+
 </x-admin-layout>

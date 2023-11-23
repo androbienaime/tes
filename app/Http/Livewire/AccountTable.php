@@ -32,12 +32,20 @@ class AccountTable extends DataTableComponent
             Column::make(__("Type of account"), "type_of_account.name")
                 ->sortable()
                 ->searchable(),
+            Column::make(__("Full Name"))
+                ->sortable()
+                ->searchable()
+                ->label(function ($row){
+                    return $row['Customer.name']. " " .$row['Customer.firstname'];
+                }),
             Column::make(__("Name"), "Customer.name")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->hideIf(true),
             Column::make(__("Firstname"), "Customer.firstname")
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->hideIf(true),
             Column::make(__("Balance / HTG"), "balance")
                 ->sortable(),
             Column::make(__("Phone"), "Customer.address.phone")
@@ -49,6 +57,8 @@ class AccountTable extends DataTableComponent
                 ->sortable()
                 ->hideIf(Gate::denies("isAdmin"))
                 ->searchable(),
+            Column::make(__("Created at"), "created_at")
+                ->sortable(),
             ButtonGroupColumn::make("Action", 'id')
                 ->buttons([
                     LinkColumn::make('') // make() has no effect in this case but needs to be set anyway
@@ -56,7 +66,6 @@ class AccountTable extends DataTableComponent
                         ->location(fn($row) => route('admin.account.show.history', $row))
                         ->attributes(function($row) {
                             return [
-                                'target' => '_blank',
                                 'class' => 'bi bi-eye-fill text-blue-600 hover:text-gray-800'
                             ];
                         }),

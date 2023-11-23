@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AccountHistoryResource;
 use App\Models\Account;
 use App\Models\Employee;
+use App\Models\Transaction;
 use App\Models\TypeOfAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -105,7 +106,9 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        if(TypeOfAccount::find($request->typeofaccount) == null){
+        $typeOfAccount = TypeOfAccount::all()->find($request->typeofaccount);
+
+        if($typeOfAccount == null){
             $message = "Ce type de compte n'existe pas";
             return back()->with("error", __($message));
         }
@@ -115,7 +118,7 @@ class AccountController extends Controller
         }else{
 
             $account->update([
-                'code' => Account::genAccountsCode(TypeOfAccount::find($request->typeofaccount)),
+                'code' => Account::genAccountsCode($typeOfAccount),
                'type_of_account_id' => $request->typeofaccount
             ]);
 
@@ -162,7 +165,8 @@ class AccountController extends Controller
 
 
         return view("adminTheme.Account.history", [
-            "account" => $account
+            "account" => $account,
+            "transactions" => Transaction::all()
         ]);
     }
 }

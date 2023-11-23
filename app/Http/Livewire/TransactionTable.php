@@ -82,27 +82,29 @@ class TransactionTable extends DataTableComponent
                 ->sortable()
                 ->hideIf(true),
             Column::make(__("No Account"), "account.code")
-                ->sortable(),
+                ->sortable()
+                ->searchable(),
             Column::make(__("Full Name"))
                 ->sortable()
                 ->searchable()
                 ->label(function ($row){
                     return $row['account.customer.name']. " " .$row['account.customer.firstname'];
-                })
-                ,
+                }),
             Column::make(__("CUSTOMER NAME"), "account.customer.name")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->hideIf(true),
             Column::make(__("CUSTOMER FIRSTNAME"), "account.customer.firstname")
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->hideIf(true),
             Column::make(__("Amount / HTG"), "amount")
                 ->sortable(),
             Column::make(__("Tags"))
                 ->label(function ($row){
-                    return $row['tags_payment']->pluck("tags")->map(function ($tags_payments){
-                        return '<span class=" badge badge-primary whitespace-normal">'.$tags_payments.'</span>';
-                    })->implode(",");
+                    return Transaction::ajouterTiret($row['tags_payment']->pluck("tags")->map(function ($tags_payment) {
+                        return $tags_payment;
+                    })->toArray());
                 })->html(),
             Column::make(__("ID TRANSACTION"), "code")
                 ->sortable(),
@@ -110,8 +112,14 @@ class TransactionTable extends DataTableComponent
                 ->sortable()
                 ->hideIf(Gate::denies("access-settings")),
             Column::make(__("Type of transaction"), __("type_of_transaction.name"))
+                ->searchable()
+                ->hideIf(true),
+            Column::make(__("Type of transaction"))
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->label(function ($row){
+                    return __($row['type_of_transaction.name']);
+                }),
             Column::make(__("Created at"), "created_at")
                 ->sortable(),
             Column::make(__("Updated at"), "updated_at")
@@ -126,22 +134,5 @@ class TransactionTable extends DataTableComponent
         ];
     }
 
-   public function ajouterTiret($liste) {
-        $resultat = [];
-        $n = count($liste);
-
-        for ($i = 0; $i < $n; $i++) {
-            $resultat[] = $liste[$i];
-            if ($i < $n - 1 && $liste[$i] + 1 !== $liste[$i + 1]) {
-                // Vérifie si le nombre suivant n'est pas consécutif
-                if ($i >= 2 && $liste[$i] - 1 === $liste[$i - 1]) {
-                    // Ajoute le tiret seulement si le précédent était consécutif
-                    $resultat[count($resultat) - 2] .= '-' . $liste[$i];
-                }
-            }
-        }
-
-        return implode(',', $resultat);
-    }
 
 }

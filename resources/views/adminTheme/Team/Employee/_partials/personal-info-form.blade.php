@@ -8,7 +8,7 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's employee information and email address.") }}
+            {{ __("Update employee information.") }}
         </p>
     </header>
 
@@ -104,7 +104,7 @@
                 <x-select-admin id="role" type="text" name="role" required>
                     @foreach($roles as $role)
 
-                        <option {{ $role->id == $employee->user->roles->first()->id ? 'selected=' : ' ' }}" value="{{ $role->id }}">{{ $role->id}}</option>
+                        <option {{ $role->id === $employee->user->roles->first()->id ? 'selected' : ' ' }} value="{{ $role->id }}">{{ __($role->name)}}</option>
                     @endforeach
                 </x-select-admin>
                 <x-input-error :messages="$errors->get('state')" class="mt-2" />

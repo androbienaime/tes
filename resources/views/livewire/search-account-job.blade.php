@@ -1,5 +1,5 @@
 <div>
-    <div class="grid gap-6 mb-2 md:grid-cols-2 border p-2">
+    <div class="grid gap-2 mb-2 md:grid-cols-2 border p-4">
         <!-- Name -->
         <div>
             <x-label-admin :required="true" for="code" :value="__('Code Customer')" />

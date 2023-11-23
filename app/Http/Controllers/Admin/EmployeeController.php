@@ -191,7 +191,6 @@ class EmployeeController extends Controller
                 'email' => $request->email
             ]);
 
-            dd($request->role);
             $employee->user->roles()->sync($request->role);
 
             $employee->address()->update([
@@ -216,7 +215,7 @@ class EmployeeController extends Controller
 
         DB::commit();
 
-        return Redirect::route('admin.employee.edit', $employee)->with('status', 'Your change has been made successfully');
+        return Redirect::route('admin.employee.edit', $employee)->with('status', __('Your change has been made successfully'));
     }
 
     /**
@@ -240,10 +239,10 @@ class EmployeeController extends Controller
                 return back()->with("error", "Error deteled");
             } else {
                 $employee->user()->first()->delete();
-                $message = "Employee deteled succesfully";
+                $message = __("Employee deteled succesfully.");
             }
         }else{
-            $message = "The employee has been restored succesfully";
+            $message = __("The employee has been restored succesfully.");
             $userDeleted->deleted_at = null;
             DB::table("users")->where("id", "=", $employee->user_id)->update([
                 "deleted_at" => null

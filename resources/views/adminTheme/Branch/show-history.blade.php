@@ -4,7 +4,7 @@
             {{ __('Report of Employee') }}
             :
             <span class="text-blue-500">
-                {{ strtoupper($branch->name) }} GGGGDG
+                {{ strtoupper($branch->name) }}
             </span>
         </h2>
     </x-slot>

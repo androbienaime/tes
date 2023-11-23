@@ -12,11 +12,11 @@
         </div>
     </x-slot>
 
-    <x-admin-tab>
-        <li class="mr-2">
+    <x-admin-tab :class="'px-5'">
+        <li class="mr-4">
             <x-admin-link-tab :href="route('admin.employee.index')" :active="request()->routeIs('admin.employee.index')">{{ __("Employee") }}</x-admin-link-tab>
         </li>
-        <li class="mr-2">
+        <li class="mr-4">
             <x-admin-link-tab :href="route('admin.employee.index')" :active="request()->routeIs('logout')">{{ __("Profile") }}</x-admin-link-tab>
         </li>
     </x-admin-tab>

@@ -5,7 +5,7 @@
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's employee information and email address.") }}
+            {{ __("Change the employee's password, they will be asked to enter a new one the next time they log in.") }}
         </p>
     </header>
     <form method="post" action="{{ route('admin.employee.updatePassword', $employee) }}" class="mt-6 space-y-6">

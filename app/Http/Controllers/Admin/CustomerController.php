@@ -218,7 +218,7 @@ class CustomerController extends Controller
      */
     private function genCustomerCode(){
         $this->code = [
-            'code' => mt_rand(100, 999)
+            'code' => mt_rand(1000000, 9999999)
         ];
 
         $rules = ['code' => 'unique:customers'];

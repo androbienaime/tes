@@ -22,15 +22,20 @@ class EmployeeTable extends DataTableComponent
         return [
             Column::make("ID", "id")
                 ->sortable(),
-            Column::make("First name", "firstname")
+            Column::make(__("First name"), "firstname")
+                ->sortable()
+                ->searchable(),
+            Column::make(__("Last name"), "lastname")
+                ->sortable()
+                ->searchable(),
+            Column::make(__("Email"), "user.email")
+                ->sortable()
+                ->searchable(),
+            Column::make(__("Nick name"), "user.name")
                 ->sortable(),
-            Column::make("Last name", "lastname")
+            Column::make(__("Gender"), "gender")
                 ->sortable(),
-            Column::make("Gender", "gender")
-                ->sortable(),
-            Column::make("First name", "firstname")
-                ->sortable(),
-            Column::make("Branch", "branch.name")
+            Column::make(__("Branch"), "branch.name")
                 ->searchable()
                 ->sortable(),
             ButtonGroupColumn::make("Action", 'id')

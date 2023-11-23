@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Type\Integer;
 
 class DepositController extends Controller
 {
@@ -48,15 +49,19 @@ class DepositController extends Controller
             $currentTime = Carbon::now();
             $tenMinutesAgo = $currentTime->subMinutes(10);
 
-            $count = DB::table('transactions')
+            $transactionExist = DB::table('transactions')
                 ->where('account_id', $account->first()->id)
-                ->where('amount', $request->amount)
                 ->where('employee_id', $employee_id)
                 ->where('created_at', '>=', $tenMinutesAgo)
-                ->count();
+                ->orderBy("created_at", "desc")
+                ->limit(1)
+                ->get()
+                ->first();
 
-            if($count > 0) {
-                return back()->with("errors2", __("Une entrée similaire existe déjà dans les 10 dernières minutes."));
+            if($transactionExist != null) {
+                if ($transactionExist->amount == $request->amount) {
+                    return back()->with("errors2", __("Une entrée similaire existe déjà dans les 10 dernières minutes."));
+                }
             }
         }
 

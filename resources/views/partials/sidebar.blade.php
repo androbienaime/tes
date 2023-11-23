@@ -1,5 +1,37 @@
+<style>
+
+
+    #sideba{
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+    #sideba:hover{
+        overflow-y: auto;
+        overflow-x: auto;
+    }
+    /* Personnalisation de la scrollbar Y */
+    /* Largeur de la scrollbar */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+        /*display:none;*/
+    }
+
+    /* Forme de la scrollbar */
+    ::-webkit-scrollbar-thumb {
+        background: #718096; /* Couleur de la scrollbar */
+        border-radius: 6px; /* Forme de la scrollbar */
+    }
+
+    /* Lorsque vous survolez la scrollbar */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #efaf0e; /* Couleur de survol */
+    }
+
+</style>
+
 <!-- Sidebar -->
-<aside :class="{ '-translate-x-full': opens }" class="md:fixed lg:fixed right-0 z-10 bg-gray-900 text-blue-100 w-64 px-2 py-4 absolute inset-y-0 left-0 md:relative transform
+<aside :class="{ '-translate-x-full': opens }" id="sideba" class="md:fixed lg:fixed right-0 z-10 bg-gray-900 text-blue-100 w-64 px-2 py-4 absolute inset-y-0 left-0 md:relative transform
              md:translate-x-0 overflow-y-auto
               transition ease-in-out duration-200 shadow-lg">
     <!-- Logo -->

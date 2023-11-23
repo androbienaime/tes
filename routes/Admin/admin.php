@@ -20,7 +20,8 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], func
     Route::group(['middleware' => "can:access-settings"], function (){
         Route::resource('branch', 'App\Http\Controllers\Admin\BranchController');
         Route::resource('employee', 'App\Http\Controllers\Admin\EmployeeController');
-        Route::resource('report', 'App\Http\Controllers\Admin\ReportController');
+        Route::resource('report', 'App\Http\Controllers\Admin\ReportController')->only(['index']);
+        Route::get('report/{date}', [ReportController::class, 'searchReportEmployees'])->name("employee.searchReportEmployees");
         Route::resource('typeofaccount', 'App\Http\Controllers\Admin\TypeOfAccountController');
 
         Route::get('typeofaccountdestroy/{id}', [TypeOfAccountController::class, 'destroy2'])->name("typeofaccountdestroy.destroy");
@@ -43,6 +44,8 @@ Route::group(['middleware' => ['auth'], 'prefix'=>'admin', 'as'=>'admin.'], func
         Route::get('/api/getmonthlyaverage', [ReportController::class, 'getmonthlyaverage']);
 
         Route::get('showdashemployeehistory/{employee}', [ReportController::class, 'showDashEmployeeHistory'])->name("dashemployeeHistory");
+
+        Route::get('report/day/detailedbranch/{branch}', [ReportController::class, 'showReportDetailedBranch'])->name("report.showReportDetailedBranch");
     });
 
     Route::get('/api/getcustomers', [CustomerController::class, 'getcustomers']);

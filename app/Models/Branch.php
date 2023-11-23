@@ -17,4 +17,5 @@ class Branch extends Model
     public function Employee(){
         return $this->hasOne(Employee::class);
     }
+
 }

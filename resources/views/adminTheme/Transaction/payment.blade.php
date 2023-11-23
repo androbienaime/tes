@@ -17,27 +17,28 @@
     <x-flashmessage :status="session('error')" :warning="true" />
 
     <!-- Panel -->
+    <div class='grid grid-cols-1 sm:px-6 mb-2 my-2'>
+        <div class='col-span-1 bg-white col-span-1 rounded p-6 overflow-x'>
+            <x-primary-panel :cs="'bi bi-cash'" :title="__('Make a payment')">
+                <div class=" ">
+                    <form method="POST" action="{{ route("admin.payment.store") }}">
+                        @csrf
+                        <x-center-form>
+                            <!-- Name -->
+                            <livewire:search-account-job />
 
-    <x-primary-panel :cs="'bi bi-cash'" :title="__('Make a payment')">
-        <div class=" ">
-            <form method="POST" action="{{ route("admin.payment.store") }}">
-                @csrf
-                <x-center-form>
-                    <!-- Name -->
-                    <livewire:search-account-job />
+                            <x-primary-button  :style="'background-color:#00416d;'">{{ __("Save") }}</x-primary-button>
+                        </x-center-form>
 
-                    <x-primary-button  :style="'background-color:#00416d;'">{{ __("Save") }}</x-primary-button>
-                </x-center-form>
-            </form>
-        </div>
-    </x-primary-panel>
-    <div class="">
-        <div class="max-w-7xl sm:px-6 ">
-            <div class="bg-white overflow-hidden shadow-sm md:max-w-screen-lg lg:md:max-w-screen-lg ">
-                <div class="p-6 text-gray-900">
-                    <livewire:transaction-table />
+                    </form>
                 </div>
-            </div>
+            </x-primary-panel>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:px-6">
+        <div class='bg-white col-span-1 rounded p-6 overflow-x'>
+            <livewire:transaction-table />
         </div>
     </div>
 </x-admin-layout>

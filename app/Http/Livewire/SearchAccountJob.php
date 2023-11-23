@@ -17,12 +17,14 @@ class SearchAccountJob extends Component
     public $current_balance = 0;
     public $references_person = " ";
     public $classes_r = '';
+    public $account = null;
 
     public function updatedQuery(){
         if(strlen($this->query) > 2) {
             $account = Account::where("code", $this->query)->first();
 
             if($account){
+                $this->account = $account;
                 $this->customer = $account->customer->firstname . " " . $account->customer->name;
                 $this->current_balance = $account->balance;
                 $this->classes = "text-green-600 border-green-400";

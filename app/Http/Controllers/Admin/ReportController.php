@@ -11,6 +11,7 @@ use App\Models\Transaction;
 use Asantibanez\LivewireCharts\Models\ColumnChartModel;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -39,8 +40,74 @@ class ReportController extends Controller
 
     }
 
+    private function dateToString($date){
+        $dateToString = "";
+        if($date == null){
+            $dateToString = strftime("%A %d %B %Y", Carbon::now()->getTimestamp()) . " | ".__("Today");
+        }else{
+            $da = new DateTime($date);
+            $dateToString =  strftime("%A %d %B %Y", $da->getTimestamp());
+        }
+
+        return $dateToString;
+    }
     public function index(){
-        return view("adminTheme.Report.index");
+        setlocale(LC_TIME, 'fr_FR', 'fra');
+
+        return view("adminTheme.Report.index",[
+            "branch_count" => Branch::count(),
+            "all_branch" => Branch::all(),
+            "employeeDataList" => $this->EmployeeDataList()[0],
+            "totals" => $this->EmployeeDataList()[1],
+            "depositAndPaymertByDay" => $this->getDepositsAndWithdrawalsForMonth(),
+            "date" => $this->dateToString(null)
+        ]);
+    }
+
+    public function EmployeeDataList($date = null){
+        $all_employee = Employee::all();
+
+        $employeeDataList = [];
+
+        $totals = [
+            'deposit_sum' => 0,
+            'withdraw_sum' => 0,
+            'sum_real' => 0,
+            'accountRegistredByDayAndEmployee' => 0,
+        ];
+
+        foreach ($all_employee as $employee) {
+            if(!$date) {
+                $employeeData = [
+                    'firstname' => $employee->firstname,
+                    'name' => $employee->lastname,
+                    'deposit_sum' => $this->getEmployeeHistory($employee)['deposit_sum'],
+                    'withdraw_sum' => $this->getEmployeeHistory($employee)['withdraw_sum'],
+                    'sum_real' => $this->getEmployeeHistory($employee)['sum_real'],
+                    'accountRegistredByDayAndEmployee' => $this->accountRegistredByDayAndEmployee($employee),
+                ];
+            }else{
+                $employeeData = [
+                    'firstname' => $employee->firstname,
+                    'name' => $employee->lastname,
+                    'deposit_sum' => $this->getEmployeeHistory($employee, $date)['deposit_sum'],
+                    'withdraw_sum' => $this->getEmployeeHistory($employee, $date)['withdraw_sum'],
+                    'sum_real' => $this->getEmployeeHistory($employee, $date)['sum_real'],
+                    'accountRegistredByDayAndEmployee' => $this->accountRegistredByDayAndEmployee($employee, $date),
+                ];
+            }
+
+            // Ajoutez les valeurs de l'employé aux totaux
+            $totals['deposit_sum'] += $employeeData['deposit_sum'];
+            $totals['withdraw_sum'] += $employeeData['withdraw_sum'];
+            $totals['sum_real'] += $employeeData['sum_real'];
+            $totals['accountRegistredByDayAndEmployee'] += $employeeData['accountRegistredByDayAndEmployee'];
+
+            $employeeDataList[] = $employeeData;
+
+
+        }
+            return [$employeeDataList, $totals];
     }
 
     public function getmonthlyaverage(){
@@ -56,6 +123,11 @@ class ReportController extends Controller
         return json_encode($transactions, true);
     }
 
+    /**
+     * @param Employee $employee
+     * @return array
+     * Permmettant d'afficher les rapports pour les employees
+     */
     public function showDashEmployeeHistory(Employee $employee){
         if(!$employee){
             abort(404);
@@ -83,7 +155,6 @@ class ReportController extends Controller
         if(!$employee){
             abort(404);
         }
-
         $this->join = ['employees', 'transactions.employee_id', '=', 'employees.id'];
         $this->query = ["employee_id", $employee->id];
         $this->__contruct();
@@ -177,6 +248,44 @@ class ReportController extends Controller
 
     }
 
+    public function accountRegistredByDayAndBranch(Branch $branch){
+        $count = 0;
+        $results = DB::table("accounts")
+            ->join("employees", "accounts.employee_id", "=", "employees.id")
+            ->join("branches", "employees.branch_id", "=", "branches.id")
+            ->whereDate('accounts.created_at', now()->toDateString())
+            ->select('branches.id as id', DB::raw('COUNT(accounts.id) as count_account'))
+            ->groupBy("id")->get();
+
+            foreach ($results as $result){
+                if($result->id == $branch->id){
+                    $count = $result->count_account;
+                }
+            }
+           return $count;
+    }
+
+    public function accountRegistredByDayAndEmployee(Employee $employee, $date = null){
+        $count = 0;
+        $dateN = now()->toDateString();
+        if($date != null){
+            $dateN = $date;
+        }
+
+        $results = DB::table("accounts")
+            ->join("employees", "accounts.employee_id", "=", "employees.id")
+            ->whereDate('accounts.created_at', $dateN)
+            ->select('employees.id as id', DB::raw('COUNT(accounts.id) as count_account'))
+            ->groupBy("id")->get();
+
+        foreach ($results as $result){
+            if($result->id == $employee->id){
+                $count = $result->count_account;
+            }
+        }
+        return $count;
+    }
+
     public function sumWhithdrawByMonth(){
         $withdraw = DB::table("type_of_transactions")
             ->where("name", "WITHDRAWAL")
@@ -265,4 +374,105 @@ class ReportController extends Controller
         return $chartPie;
 
     }
+
+    /**
+     * @param Branch $branch
+     * @return array
+     */
+    public function getBranchHistory(Branch $branch){
+        if(!$branch){
+            abort(404);
+        }
+
+        $this->join = ['employees', 'transactions.employee_id', '=', 'employees.id'];
+        $this->query = ["employees.branch_id", $branch->id];
+        $this->__contruct();
+
+        return [
+            "deposit_sum" => $this->sumDepositByDay(),
+            "withdraw_sum" => $this->sumWhithdrawByDay(),
+            "sum_real" => $this->sumDepositByDay() - $this->sumWhithdrawByDay(),
+        ];
+    }
+
+    public function getEmployeeHistory(Employee $employee, $date = null){
+        if(!$employee){
+            abort(404);
+        }
+
+        $this->join = ['employees', 'transactions.employee_id', '=', 'employees.id'];
+        $this->query = ["employee_id", $employee->id];
+        $this->__contruct();
+
+        if($date != null) {
+            $this->dateToday = $date;
+        }
+
+        return [
+            "deposit_sum" => $this->sumDepositByDay(),
+            "withdraw_sum" => $this->sumWhithdrawByDay(),
+            "sum_real" => $this->sumDepositByDay() - $this->sumWhithdrawByDay(),
+        ];
+    }
+
+    public function getDetailedTransactionsByBranch(Branch $branch){
+        return DB::table("transactions as t")
+            ->join("employees as e", "e.id", "t.employee_id")
+            ->join("branches as b", "b.id", "e.branch_id")
+            ->whereDate('t.created_at', now()->toDateString())
+            ->where("b.id", $branch->id)
+            ->select(["b.id as branch_id", "t.*"])
+            ->get();
+    }
+
+    public function showReportDetailedBranch(Branch $branch){
+        $details = [];
+
+        $datas = $this->getDetailedTransactionsByBranch($branch);
+        foreach ($datas as $data) {
+            $td = Transaction::all()->find($data->id);
+
+            $desc = Transaction::ajouterTiret($td->tagspayment()->pluck("tags"));
+
+            if(count($td->tagspayment()->pluck("tags")) == 0){
+                $desc = $td->type_of_transaction->name;
+            }
+            $details[] = [
+                "created_at" => \Carbon\Carbon::parse($data->created_at)->format('Y-m-d'),
+                "code" => Account::all()->find($data->account_id)->code,
+                "amount" => $data->amount,
+                "description" => $desc,
+                "employee" => Employee::all()->find($data->employee_id)->firstname
+            ];
+        }
+
+        return view("adminTheme.Report.report-detailed-branch", [
+            "details" => $details,
+            "branch" => $branch
+        ]);
+    }
+
+    public function getDepositsAndWithdrawalsForMonth()
+    {
+        $startDate = Carbon::now()->startOfMonth();
+        $endDate = Carbon::now()->endOfMonth();
+        return $depositsAndWithdrawals = Transaction::depositsAndWithdrawalsByDay($startDate, $endDate)->get();
+    }
+
+    public function searchReportEmployees($date){
+        if(!$date){
+            abort(404);
+        }
+        $this->getDepositsAndWithdrawalsForMonth();
+
+        return view("adminTheme.Report.index",[
+            "branch_count" => Branch::count(),
+            "all_branch" => Branch::all(),
+            "employeeDataList" => $this->EmployeeDataList($date)[0],
+            "totals" => $this->EmployeeDataList($date)[1],
+            "depositAndPaymertByDay" => $this->getDepositsAndWithdrawalsForMonth(),
+            "date" => $this->dateToString($date)
+        ]);
+    }
+
 }

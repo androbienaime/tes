@@ -50,6 +50,7 @@ class WithdrawController extends Controller
             $message = "You cannot withdraw from this type of account.";
         }
 
+
         if($i > 0){
             return back()->with("error", __($message));
         }

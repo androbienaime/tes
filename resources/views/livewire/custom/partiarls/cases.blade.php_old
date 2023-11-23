@@ -1,12 +1,10 @@
 @if($accountExist)
     @if($account->type_of_account->active_case_payments  == true)
 
-        <div class="grid gap-1 mb-2 md:grid-cols-2  p-2">
-            @for($j=0; $j < (30 * $account->type_of_account->duration)/30; $j++)
-                <div class="w-full p-2 overflow-x-auto">
-            <table  class="mx-auto border-collapse border border-gray-400 w-full">
-                @for($i = 30 * $j+1; $i <= 30 * ($j + 1); $i++)
-                    @if(($i - 1) % 5 == 0)
+        <div class="mx-auto px-4 overflow-x-auto">
+            <table  class="border-collapse border border-gray-400 w-full">
+                @for($i = 1; $i <= 30 * $account->type_of_account->duration; $i++)
+                    @if(($i - 1) % 10 == 0)
                         <tr>
                             @endif
 
@@ -33,8 +31,7 @@
                     @endif
                 @endfor
             </table>
-                </div>
-            @endfor
         </div>
         @endif
         @endif
+        </div>
